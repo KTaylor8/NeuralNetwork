@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 #defines file
-file = ('C:/Users/s-2508690/Desktop/Python/FBD Program Learning/Pythontest.xlsx')
+file = ( 'C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\doil.xlsx' )
 
 #puts it into python
 x1 = pd.ExcelFile(file)
@@ -25,11 +25,5 @@ df1 = df1.values
 print(df1)
 print(df1.shape)
 
-df2 = np.array(np.random.random((3, 2)))
-print(df2)
-
-df3 = np.vstack((df1, df2))
-
-print(df3)
 
 
