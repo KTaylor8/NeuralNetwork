@@ -29,7 +29,7 @@ f3 = 1/(1+(math.e**f2))
 print(f3)
 
 #creates threshold to find output value (0 or 1)
-if f3 > 0.5:
+if f3 < 0.5:
     print('1')
-elif f3 <= 0.5:
+elif f3 >= 0.5:
     print('0')
