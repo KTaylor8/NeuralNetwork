@@ -18,18 +18,21 @@ def __sumofdot(x, w, b):
 #define main code
 def main():
     #Create list
-    f = np.array([float(x) for x in input().split()])
+    f = np.array([float(x) for x in input("enter list: ").split()])
     l = f.size
 
     #assign weights and bias
     w = np.random.randint(0, high=3, size=(1,l))
+    print("The weights are", w)
     b = -5
 
     #find sum of dot product of list
-    f2 =__sumofdot(f, w, b)
-    
+    f2 = __sumofdot(f, w, b)
+    print("The sum of the dot product is", f2)
+
     #apply activation function
     f3 = sigmoid(f2)
+    print("The raw output is", f3)
 
     #set threshold and decide to fire or not
     if f3 > 0.5:
