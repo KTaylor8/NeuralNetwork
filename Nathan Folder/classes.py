@@ -16,6 +16,11 @@ class network(object):
         self.weights = [np.random.randn(y, x)
                         for x, y in zip(sizes[:-1], sizes[1:])]
     
-    def sigmoid(self, x)
+    def sigmoid(self, z):
+        act = 1/(1+ math.e**((-1)*(z)))
+        return act
+    
+    def main():
+        #find the 
 
 

@@ -4,10 +4,6 @@ import os
 import random
 import time
 """
-This is a sample code for a neuron. The purpose of making this code is to practice and experiment with different techniques that will be applied to a real neural network, such as defining functions and converting multi-dimensional inputs into one or two dimensional outputs. This code does not represent a final product for a neuron, rather a practice to understand it.
-"""
-
-"""
 We start the code by defining the activation function. The activation function will map the raw output of inputs, weights, and biases onto a function, which can then be used to determine if a neuron fires or not.
 """
 
@@ -54,7 +50,7 @@ def main():
     f3 = sigmoid(f2)
     print("The raw output is", f3)
 
-    """Sets a threshold for the activation function to determine if it fires or not
+    """Sets a threshold for the activation function to determine if it fires or not (This may or may not be taken out, depending on how the neural network end up)
     """
 
     if f3 > 0.5:
@@ -62,4 +58,7 @@ def main():
     if f3 <= 0.5:
         print('0')
 
-main()
+if __name__ == main():
+    import doctest
+    doctest.testmod()
+    main()
