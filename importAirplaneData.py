@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 # defines file
-file = ('C:/Users/s-2508690/Desktop/Python/FBD Program Learning/Pythontest.xlsx')
+file = ('\dairplaneNoiseData.xlsx')
 
 # puts it into python
 x1 = pd.ExcelFile(file)
