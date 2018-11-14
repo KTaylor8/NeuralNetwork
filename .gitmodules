@@ -1,0 +1,6 @@
+[submodule "Katie/Katie/numpy"]
+	path = Katie/Katie/numpy
+	url = https://github.com/numpy/numpy.git
+[submodule "Katie/numpy"]
+	path = Katie/numpy
+	url = https://github.com/numpy/numpy.git
