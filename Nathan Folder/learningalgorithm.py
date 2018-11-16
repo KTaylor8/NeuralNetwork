@@ -5,48 +5,46 @@ import os
 import pandas
 
 class backpropagation:
-    import class network
     
+    def updateWB(self, miniBatch, learningRate):
 
-    def update_w_b(self, minibatch, l_r):
+        nablaW = np.zeros((weights.shape) for x in self.weights)
+        nablaB = np.zeros((biases.shape) for x in self.biases)
 
-        nabla_w = np.zeros((w.shape) for x in self.weights)
-        nabla_b = np.zeros((b.shape) for x in self.biases)
+        for x, y in miniBatch:
+            deltaNablaB, deltaNablaW = backprop(x, y)
 
-        for x, y in minibatch:
-            delta_nabla_b, delta_nabla_w = backprop(x, y)
+            nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
-            nabla_w = (nabla_w + delta_nabla_w for nabla_w, delta_nabla_w in zip(nabla_w, delta_nabla_w))
+            nablaB = (nablaB + deltaNablaB for nablaB, deltaNablaB in zip(nablaB, deltaNablaB))
 
-            nabla_b = (nabla_b + delta_nabla_b for nabla_b, delta_nabla_b in zip(nabla_b, delta_nabla_b))
+            self.weights = (weights - (learningRate/len(miniBatch))*nablaW for weights, nablaW in zip(weights, nablaW))
 
-            self.weights = (weights - (l_r/len(minibatch))*nabla_w for weights, nabla_w in zip(weights, nabla_w))
+            self.biases = (biases - (learningRate/len(minibatch))*nablaB for weights, nablaB in zip(weights, nablaB))
 
-            self.biases = (biases - (l_r/len(minibatch))*nabla_b for weights, nabla_b in zip(weights, nabla_b))
-
-    def backprop(self, nabla_b, nabla_w):
+    def backprop(self, nablaB, nablaW):
 
         #define activation, weighted inputs, and set up all lists/tuples
         activation = x
         activations = [x]
-        zs = []
+        zList = []
 
         #feedforward
-        zlist = (np.multiply(w, inp) + b)
-        act = sigmoid(zs)
+        zList = (np.multiply(weights, input) + biases)
+        act = sigmoid(zList)
 
         #error in output layer
-        error_o = np.dot(nabla_a, sigmoidprime(l))
+        errorO = np.dot(nablaA, sigmoidprime(l))
 
         #error in other layers
         for l in numlayers:
-            lweight = np.transpose(weights)
-            error_i = np.dot(((x*e), sigmoidprime(z) for x, e, z in lweight, error_o, zlist))
-
+            lWeight = np.transpose(weights)
+            errorI = (np.dot(x, sigmoidprime(z) for x in lWeight))
+            
         #find roc for biases + apply
-        delta_nabla_b = error_l
+        deltaNablaB = errorL
 
         #find roc for weights + apply
-        delta_nabla_w = error_l * self.activations()
+        deltaNablaW = errorL * self.activations()
 
-        return delta_nabla_b, delta_nabla_w
+        return deltaNablaB, deltaNablaW
