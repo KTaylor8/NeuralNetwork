@@ -6,16 +6,24 @@ import csv
 import os
 import random as rdm
 import numpy as np
-import pandas as pd
 
 
 def main():
-    print("done")
-    # class Network():
-    #     with open("ticTacToeData.cvs", newline='') as csvfile:
-    #         reader = csv.reader(csvfile, delimiter=' ')
-    #         for row in reader:
-    #             print('; '.join(row))
+    class Network():
+        with open("ticTacToeData.csv", newline='') as csvfile:
+            readData = csv.reader(csvfile, delimiter=' ')
+            iterationAccuracyDict = {}
+            for row in readData:  # each row is a single element list
+                rowStr = "".join(row)
+                rowSplit = rowStr.split(",")
+                print(rowSplit)
+                theoreticalOutput = rowSplit[9]
+                rowInputs = rowSplit[0:8]
+                print(rowInputs)
+                break
+
+                # append theoretical matches exp yes or no
+                # iterationAccuracyDict.append("")
 
     # csv python file handling
     # split()
