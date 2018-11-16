@@ -7,7 +7,7 @@ import pandas
 class backpropagation:
     
 
-    def update_w_b(self, minibatch, l_r):
+    def UpdateWB(self, minibatch, l_r):
 
         NablaW = np.zeros((w.shape) for x in self.weights)
         NablaB = np.zeros((b.shape) for x in self.biases)
