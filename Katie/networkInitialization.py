@@ -37,17 +37,10 @@ class network():
         """Runs a neuron input through all layers in a network and returns an output for the neuron"""
         # I'M CONFUSED ABOUT HOW TO DO THE LOOPING SO THAT IT GOES THROUGH ALL NEURONS AND ALL LAYERS
         # each input corresponds to a neuron in the hidden layer
+        sigmoidOutputList = []
         for neuron in zip(self.b, self.w):
-            sigmoidOutput = sigmoid(np.dot(self.w[neuron],
-                                           neuronInput)+self.b[neuron])
-
-        # compares sigmoidOutput to threshold to see if it fires or not:
-        # I'm not sure what the firing and not firing looks like in code
-        if sigmoidOutput > 0.5:
-            # fires and passes something on to outputs
-        elif sigmoidOutput <= 0.5:
-            # doesn't fire
-        return neuronOutput  # currently undefined
+            sigmoidOutputList.append(sigmoid(np.dot(self.w[neuron],
+                                                    neuronInput)+self.b[neuron]))
 
     """
     The sigmoid activation function put the inputs, weights, and biases into a function that helps us determine if the neuron fiers or not.
