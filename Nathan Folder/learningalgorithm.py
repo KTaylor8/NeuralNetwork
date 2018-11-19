@@ -6,10 +6,17 @@ import pandas
 
 class backpropagation:
     
+    def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData = None):
+        n = len(trainingData)
+        for x in xrange(epochs):
+            miniBatches = [trainingData[k:k+miniBatchSize] for k in xrange(0, n, miniBatchSize)]
+        for miniBatch in miniBatches:
+            self.updateWB(miniBatch, learningRate)
+            
     def updateWB(self, miniBatch, learningRate):
 
-        nablaW = np.zeros((weights.shape) for x in self.weights)
-        nablaB = np.zeros((biases.shape) for x in self.biases)
+        nablaW = np.zeros((w.shape) for x in self.w)
+        nablaB = np.zeros((b.shape) for x in self.b)
 
         for x, y in miniBatch:
             deltaNablaB, deltaNablaW = backprop(x, y)
@@ -18,9 +25,9 @@ class backpropagation:
 
             nablaB = (nablaB + deltaNablaB for nablaB, deltaNablaB in zip(nablaB, deltaNablaB))
 
-            self.weights = (weights - (learningRate/len(miniBatch))*nablaW for weights, nablaW in zip(weights, nablaW))
+            self.w = (w - (learningRate/len(miniBatch))*nablaW for w, nablaW in zip(w, nablaW))
 
-            self.biases = (biases - (learningRate/len(minibatch))*nablaB for weights, nablaB in zip(weights, nablaB))
+            self.b = (b - (learningRate/len(minibatch))*nablaB for b, nablaB in zip(b, nablaB))
 
     def backprop(self, nablaB, nablaW, numlayers):
 
@@ -30,7 +37,7 @@ class backpropagation:
         zList = []
 
         #feedforward
-        z = (np.dot(self.weights, input) + biases)
+        z = (np.dot(self.w, input) + b)
         zList.append(z)
         activations = (sigmoid(x) for x in zList)
 
@@ -53,7 +60,7 @@ class backpropagation:
         for l in xrange(2, self.numlayers):
             z = zList[numlayers]
             sp = sigmoidprime(z)
-            errorL = np.dot(self.weights[-l+1].transpose(), delta) * sp
+            errorL = np.dot(self.w[-l+1].transpose(), delta) * sp
             nablaB = delta
             nablaW = np.dot(delta, activations[-l-1].transpose())
         """# backward pass
