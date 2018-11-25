@@ -42,8 +42,8 @@ class network():
                 minibatchInputs = tuple(minibatchInputs)
                 theoreticalOutput = tuple(minibatchSplit[9])
                 for inputNum in minibatchInputs:
-                    feedforward(minibatchInputs[inputNum], inputNum)
-                    # not sure how to call the feedforward method
+                    self.feedforward(minibatchInputs[inputNum], inputNum)
+                    # class.method(args)
 
     def feedforward(self, neuronInput, inputNum):
         """
@@ -51,8 +51,8 @@ class network():
         """
         sigmoidOutputList = []
         for neuron in zip(self.b, self.w):
-            sigmoidOutputList.append(sigmoid(np.dot(self.w[neuron],
-                                                    neuronInput)+self.b[neuron]))
+            sigmoidOutputList.append(self.sigmoid(np.dot(self.w[neuron],
+                                                         neuronInput)+self.b[neuron]))
 
     def sigmoid(self, dotProdSum):
         """
@@ -62,7 +62,15 @@ class network():
         return sigmoidOutput
 
 
-if __name__ == main():  # not sure how class relates to main()
+def main():
+    inputNuerons = int(input("How many inputs do you have? \n"))
+    outputNuerons = int(input("How many outputs do you want? \n"))
+    neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
+    # not sure how to call init() in network class
+    network.init(neuronsPerLayer)
+
+
+if __name__ == main():  # not quite sure how class relates to main()
     import doctest
     doctest.testmod()
     main()
