@@ -4,15 +4,18 @@ import random
 import numpy as np
 import math
 
-# asks user to set number of layers and neurons and outputs (9,9,3)
+# asks user to set number of layers and neurons and outputs (9,9,1)
 # randomizes weights and biases
+# x = 1 and b,o = 0
 # setting minibatch (row) that runs through each time and changes weights and biases based on accuracy
 
 
 class network():
 
     def init(self, layerSizes):
-        """Takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the weights and biases. The input layer is the first one and the weights and biases aren't applied to it."""
+        """
+        Takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the weights and biases. The input layer is the first one and the weights and biases aren't applied to it.
+        """
         self.numLayers = len(layerSizes)
         self.layerSizes = layerSizes
         # self.b = [random.uniform(0, 1) for y in layerSizes[1:]]
@@ -22,43 +25,52 @@ class network():
                   for x, y in zip(layerSizes[:-1], layerSizes[1:])]  # ?
 
     def inputMinibatch(self):
+        """
+        Reads csv file with data line by line (each line is a minibatch), converts input "x"s to 1 and "o"s and "b"s to 0, converts the line of data into two tuples of single item strings: the inputs and the theoretical output, and feeds forward each minibatch's inputs into the network.
+        """
         with open("ticTacToeData.csv", newline='') as csvfile:
             readData = csv.reader(csvfile, delimiter=' ')
             for minibatch in readData:  # each row begins as single el list
                 minibatchStr = "".join(minibatch)
                 minibatchSplit = minibatchStr.split(",")
+                minibatchInputs = minibatchSplit[0:8]
+                for i in minibatchInputs:
+                    if minibatchInputs[i] == "x":
+                        minibatchInputs[i] = 1
+                    else:  # if o or b
+                        minibatchInputs[i] = 0
+                minibatchInputs = tuple(minibatchInputs)
                 theoreticalOutput = tuple(minibatchSplit[9])
-                minibatchInputs = tuple(minibatchSplit[0:8])
                 for inputNum in minibatchInputs:
-                    feedforward(minibatchInputs[inputNum], inputNum)
-                    # not sure how to assign number values to the inputs to make them calculatable in the sigmoid function; and not sure how to call the feedforward method
+                    self.feedforward(minibatchInputs[inputNum], inputNum)
+                    # class.method(args)
 
     def feedforward(self, neuronInput, inputNum):
-        """Runs a neuron input through all layers in a network and returns an output for the neuron"""
-        # I'M CONFUSED ABOUT HOW TO DO THE LOOPING SO THAT IT GOES THROUGH ALL NEURONS AND ALL LAYERS
-        # each input corresponds to a neuron in the hidden layer
+        """
+        Runs a neuron input through all layers in a network and returns an output for the neuron. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
+        """
+        sigmoidOutputList = []
         for neuron in zip(self.b, self.w):
-            sigmoidOutput = sigmoid(np.dot(self.w[neuron],
-                                           neuronInput)+self.b[neuron])
+            sigmoidOutputList.append(self.sigmoid(np.dot(self.w[neuron],
+                                                         neuronInput)+self.b[neuron]))
 
-        # compares sigmoidOutput to threshold to see if it fires or not:
-        # I'm not sure what the firing and not firing looks like in code
-        if sigmoidOutput > 0.5:
-            # fires and passes something on to outputs
-        elif sigmoidOutput <= 0.5:
-            # doesn't fire
-        return neuronOutput  # currently undefined
-
-    """
-    The sigmoid activation function put the inputs, weights, and biases into a function that helps us determine if the neuron fiers or not.
-    """
-
-    def sigmoid(self, x):
-        sigmoidOutput = 1/(1+(math.e**((-1)*x)))
+    def sigmoid(self, dotProdSum):
+        """
+        The sigmoid activation function put the inputs, weights, and biases into a function that helps us determine if the neuron fires or not.
+        """
+        sigmoidOutput = 1/(1+(math.e**((-1)*dotProdSum)))
         return sigmoidOutput
 
 
-if __name__ == main():  # not sure how class relates to main()
+def main():
+    inputNuerons = int(input("How many inputs do you have? \n"))
+    outputNuerons = int(input("How many outputs do you want? \n"))
+    neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
+    # not sure how to call init() in network class
+    network.init(neuronsPerLayer)
+
+
+if __name__ == main():  # not quite sure how class relates to main()
     import doctest
     doctest.testmod()
     main()
