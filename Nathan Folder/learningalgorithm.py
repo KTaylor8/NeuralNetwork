@@ -3,23 +3,74 @@ import numpy as np
 import math
 import os
 import pandas
+import random
+
+def sigmoid(self, z):
+    """Function for the activation function. Used to calculate the output of each neuron and the derivative of itself"""
+    s = (1/(1 + math.exp(z*(-1))))
+    return(s)
+
+def sigmoidprime(self, z):
+    """Function for the derivative of the activation function. Used to find the error of each neuron"""
+    sp = sigmoid(z) * (1 - sigmoid(z))
+    return sp
+
+def costderivative(self, output, y):
+    """Function for the derivative of the cost function. Used to find the error of each neuron"""
+    return (output - y)
 
 class backpropagation:
-    
-    def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData = None):
+    self = 0
+    x = np.random.randint(0, 1, [1, 3])
+    miniBatch = np.random.randint(0, high=1, size=[3, 0])
+    numLayers = len(miniBatch)
+    w = np.random.randint(0, 1, size=(3, 3))
+    b = np.random.randint(0, 1, size=(3, 3))
+    def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
+    = None):
         n = len(trainingData)
-        for x in xrange(epochs):
-            miniBatches = [trainingData[k:k+miniBatchSize] for k in xrange(0, n, miniBatchSize)]
+        for k in range(epochs):
+            miniBatches = [trainingData[k:k+miniBatchSize] for k in range(0, n, miniBatchSize)]
         for miniBatch in miniBatches:
-            self.updateWB(miniBatch, learningRate)
-            
-    def updateWB(self, miniBatch, learningRate):
+            self.updateWB(miniBatch, learningRate, w, b)
+            """Still working on how to end an epoch/exit out of program"""
 
+        if testData:
+            print ("Epoch Over")
+    def backprop(self, nablaB, nablaW, numLayers):
+            """This function calculates the rate of change of the cost function and the biases/weights, uses that to find the error of each neuron, and uses the error to calculate the change in weights and biases. Variables are self, the change in b and a, and the number of layers in a minibatch"""
+            #define activation, weighted inputs, and set up all lists/tuples
+            activation = x
+            activations = [x]
+            zList = []
+
+            """Feedforward section of the network. Calculates the activation for each neuron of the network and """
+            z = (np.dot(self.w, input) + b)
+            zList.append(z)
+            activations = (sigmoid(x) for x in zList)
+
+            errorL = self.costderivative((activations[numLayers], y) for y in actualOutput) * sigmoidprime(z[numLayers])
+
+            nablaB[numLayers] = errorL
+            nablaW[numLayers] = np.dot(errorL, activations[numLayers - 1].transpose())
+
+            for l in range(2, self.numLayers):
+                z = zList[numLayers]
+                sp = sigmoidprime(z)
+                errorL = np.dot(self.w[-l+1].transpose(), errorL) * sp
+                nablaB = errorL
+                nablaW = np.dot(errorL, activations[-l-1].transpose())
+
+            return nablaB, nablaW
+
+    def updateWB(self, miniBatch, learningRate, w, b):
+        """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
+    
         nablaW = np.zeros((w.shape) for x in self.w)
         nablaB = np.zeros((b.shape) for x in self.b)
 
         for x, y in miniBatch:
-            deltaNablaB, deltaNablaW = backprop(x, y)
+            deltaNablaB, deltaNablaW = backprop(self, x, y, numLayers)
 
             nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
@@ -27,66 +78,6 @@ class backpropagation:
 
             self.w = (w - (learningRate/len(miniBatch))*nablaW for w, nablaW in zip(w, nablaW))
 
-            self.b = (b - (learningRate/len(minibatch))*nablaB for b, nablaB in zip(b, nablaB))
+            self.b = (b - (learningRate/len(miniBatch))*nablaB for b, nablaB in zip(b, nablaB))
 
-    def backprop(self, nablaB, nablaW, numlayers):
-
-        #define activation, weighted inputs, and set up all lists/tuples
-        activation = x
-        activations = [x]
-        zList = []
-
-        #feedforward
-        z = (np.dot(self.w, input) + b)
-        zList.append(z)
-        activations = (sigmoid(x) for x in zList)
-
-        # activation = x
-        """activations = [x] # list to store all the activations, layer by layer
-        zs = [] # list to store all the z vectors, layer by layer
-        for b, w in zip(self.biases, self.weights):
-            z = np.dot(w, activation)+b
-            zs.append(z)
-            activation = sigmoid(z)
-            activations.append(activation)
-        #error in output layer
-        errorO = np.dot(nablaA, sigmoidprime(l))"""
-
-        errorL = self.costderivative(activations[numlayers], y) * sigmoidprime(z[numlayers])
-
-        nablaB[numlayers] = errorL
-        nablaW[numlayers] = np.dot(errorL, activations[numlayers - 1].transpose())
-
-        for l in xrange(2, self.numlayers):
-            z = zList[numlayers]
-            sp = sigmoidprime(z)
-            errorL = np.dot(self.w[-l+1].transpose(), delta) * sp
-            nablaB = delta
-            nablaW = np.dot(delta, activations[-l-1].transpose())
-        """# backward pass
-        delta = self.cost_derivative(activations[-1], y) * \
-            sigmoid_prime(zs[-1])
-        nabla_b[-1] = delta
-        nabla_w[-1] = np.dot(delta, activations[-2].transpose())
-        # Note that the variable l in the loop below is used a little
-        # differently to the notation in Chapter 2 of the book.  Here,
-        # l = 1 means the last layer of neurons, l = 2 is the
-        # second-last layer, and so on.  It's a renumbering of the
-        # scheme in the book, used here to take advantage of the fact
-        # that Python can use negative indices in lists.
-        for l in xrange(2, self.num_layers):
-            z = zs[-l]
-            sp = sigmoid_prime(z)
-            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
-            nabla_b[-l] = delta
-            nabla_w[-l] = np.dot(delta, activations[-l-1].transpose())
-        return (nabla_b, nabla_w)"""
-
-        return NablaB, NablaW
-
-    def sigmoidprime(z):
-        sp = sigmoid(z) * (1 - sigmoid(z))
-        return sp
-
-    def costderivative(self, output, y):
-        return (output - y)
+   
