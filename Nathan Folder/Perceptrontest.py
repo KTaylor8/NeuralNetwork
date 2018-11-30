@@ -7,24 +7,28 @@ import time
 We start the code by defining the activation function. The activation function will map the raw output of inputs, weights, and biases onto a function, which can then be used to determine if a neuron fires or not.
 """
 
+
 def sigmoid(x):
     f3 = 1/(1+(math.e**((-1)*x)))
     return f3
 
+
 """
 The next step is to define the raw output function. This will take the sum of the dot product of the weights and inputs, then adds the bias.
-
 A dot product is the product of two vectors (weights and inputs)
 """
+
 
 def __sumofdot(x, w, b):
     f1 = np.multiply(x, w)
     f2 = np.sum(f1, axis=None) + b
     return f2
 
+
 """
 This is the main code. This is defined as a function because it is easier to think of a neuron as a function, so it can be called any time.
 """
+
 
 def main():
     """ Creates a list of inputs from the user, and defines the length of the list of inputs
@@ -37,7 +41,7 @@ def main():
     Creates a list of weights for every input, and creates a set bias
     """
 
-    w = np.random.randint(0, high=3, size=(1,l))
+    w = np.random.randint(0, high=3, size=(1, l))
     print("The weights are", w)
     b = -5
 
@@ -57,6 +61,7 @@ def main():
         print('1')
     if f3 <= 0.5:
         print('0')
+
 
 if __name__ == main():
     import doctest
