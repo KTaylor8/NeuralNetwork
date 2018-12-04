@@ -1,3 +1,4 @@
+import csv
 import os
 import random
 import numpy as np
@@ -60,15 +61,14 @@ class network():
         """
         Runs a neuron input through all layers in a network and returns an output for the network. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
         """
-        # to test, send an input through a single neuron in the hidden layer and then the output layer to produce one experimental output
         sigOutputList = []  # outputs through all neurons for one input put into network
-        # need to distinguish between neuron and layer values
-        for neuron in range(self.numLayers-1):
-            print(f'Neuron weight: {self.w[neuron]}')  # debugging
-            neuronOutput = self.sigmoid(
-                np.dot(self.w[neuron], neuronInput)+self.b[neuron])
-            sigOutputList.append(neuronOutput)
-            # currently a list of hidden neuron sigmoid outputs (only the 1st one, in this case) but I need it to be an experimental output of positive or negative for the whole network
+        # for neuron in range(self.numLayers-1):
+        neuron = 0  # one input through one neuron
+        print(f'1st neuron weight: {self.w[neuron]}')  # debugging
+        neuronOutput = self.sigmoid(
+            np.dot(self.w[neuron], neuronInput)+self.b[neuron])
+        sigOutputList.append(neuronOutput)
+        # currently a list of hidden neuron sigmoid outputs (only the 1st one, in this case) but I need it to be an experimental output of positive or negative for the whole network
         return sigOutputList
 
     def sigmoid(self, dotProdSum):
