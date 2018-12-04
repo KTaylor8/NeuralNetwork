@@ -5,6 +5,7 @@ import os
 import pandas
 import random
 import csv
+
 miniBatch = np.random.randint(0, high=1, size=[3, 0])
 numLayers = len(miniBatch)
 w = np.random.randint(0, 1, size=[3, 3])
@@ -14,29 +15,28 @@ numLayers = len(miniBatch)
 inputs = np.random.randint(0, 1, size=[3, 3])
 output = np.random.randint(0, 1, [1, 3])
 zList = np.dot(inputs, w)
-z = 0
-def feedforward(self, z):
-    z = np.dot(inputs, b)
-    return z
-
-def sigmoid(self, z):
-    """Function for the activation function. Used to calculate the output of each neuron and the derivative of itself"""
-    s = (1/(1 + math.exp(z*(-1))))
-    return(s)
-
-def sigmoidprime(self, z):
-    """Function for the derivative of the activation function. Used to find the error of each neuron"""
-    sp = (sigmoid(z) * (1 - sigmoid(z)) for z in zList)
-    return sp
-
-def costderivative(self, output, y):
-    """Function for the derivative of the cost function. Used to find the error of each neuron"""
-    return (output - y)
+x = 0
 
 class backpropagation():
-    w = np.random.randint(0, 1, size=(3, 3))
-    b = np.random.randint(0, 1, size=(3, 3))
     
+    def feedforward(self, z):
+        z = np.dot(inputs, b)
+        return z
+
+    def sigmoid(self, z):
+        """Function for the activation function. Used to calculate the output of each neuron and the derivative of itself"""
+        s = (1/(1 + math.exp(z*(-1))))
+        return(s)
+
+    def sigmoidprime(self, s):
+        """Function for the derivative of the activation function. Used to find the error of each neuron"""
+        sp = (sigmoid(s) - sigmoid(s)**2 for s in sList)
+        return sp
+
+    def costderivative(self, output, y):
+        """Function for the derivative of the cost function. Used to find the error of each neuron"""
+        return (output - y)
+
     def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
     = None):
         n = len(trainingData)
@@ -82,7 +82,7 @@ class backpropagation():
         nablaB = np.zeros((b.shape) for x in self.b)
 
         for x, y in miniBatch:
-            deltaNablaB, deltaNablaW = self.backprop(self, x, y, numLayers)
+            deltaNablaB, deltaNablaW = self.backprop(self, nablaB, nablaW, numLayers)
 
             nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
@@ -93,6 +93,10 @@ class backpropagation():
             self.b = (b - (learningRate/len(miniBatch))*nablaB for b, nablaB in zip(b, nablaB))
 
 def main():
-    minibatch = np.array([i] for i in input("Enter number"))
-    w = np.random.rand(0, 1, [3, 3])
-    b = np.random.rand(0, 1, [3, 3])
+    miniBatch = np.array(([i] for i in input("Enter number")), dtype=None)
+    backpropagation.updateWB(self, miniBatch)
+    
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+    main()

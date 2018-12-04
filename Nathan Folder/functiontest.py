@@ -1,12 +1,6 @@
-import numpy as np
-import math
-import random
+class Test(object):
+  def method_one(self):
+    print ("Called method_one")
 
-def main():
-    miniBatch = np.array([i] for i in input("Enter number"))
-    print(miniBatch)
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    main()
+  def method_two():
+    print ("Called method_two")
