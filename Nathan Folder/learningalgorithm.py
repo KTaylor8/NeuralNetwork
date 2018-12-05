@@ -20,7 +20,8 @@ x = 0
 class backpropagation():
     
     def feedforward(self, z):
-        z = np.dot(inputs, b)
+        """Feedforward part: finding weighted sum of the weights and inputs, then adds bias"""
+        z = np.add(np.dot(inputs, w), b)
         return z
 
     def sigmoid(self, z):
@@ -30,7 +31,7 @@ class backpropagation():
 
     def sigmoidprime(self, s):
         """Function for the derivative of the activation function. Used to find the error of each neuron"""
-        sp = (sigmoid(s) - sigmoid(s)**2 for s in sList)
+        sp = (self.sigmoid(s) - self.sigmoid(s)**2)
         return sp
 
     def costderivative(self, output, y):
@@ -61,12 +62,12 @@ class backpropagation():
             zList.append(z)
             activations = (self.sigmoid(x) for x in zList)
 
-            errorL = self.costderivative((activations[numLayers], y) for y in output) * self.sigmoidprime(z[numLayers])
+            errorL = self.costderivative((activations[numLayers], (y for y in output))) * self.sigmoidprime(z[numLayers])
 
             nablaB[numLayers] = errorL
             nablaW[numLayers] = np.dot(errorL, activations[numLayers - 1].transpose())
 
-            for l in range(2, self.numLayers):
+            for l in range(2, numLayers):
                 z = zList[numLayers]
                 sp = self.sigmoidprime(z)
                 errorL = np.dot(self.w[-l+1].transpose(), errorL) * sp
@@ -81,8 +82,8 @@ class backpropagation():
         nablaW = np.zeros((w.shape) for x in self.w)
         nablaB = np.zeros((b.shape) for x in self.b)
 
-        for x, y in miniBatch:
-            deltaNablaB, deltaNablaW = self.backprop(self, nablaB, nablaW, numLayers)
+        for [x, y] in miniBatch:
+            deltaNablaB, deltaNablaW = self.backprop(self, x, y, numLayers)
 
             nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
@@ -92,9 +93,44 @@ class backpropagation():
 
             self.b = (b - (learningRate/len(miniBatch))*nablaB for b, nablaB in zip(b, nablaB))
 
+def getMiniBatch():
+    with open("ticTacToeData.csv", "r", newline='') as dataFile:
+        miniB = dataFile.readline()
+        miniBSplit = miniB.split(",")
+        miniBatchInputs = miniB.split[0:8]
+        for i in range(len(miniBatchInputs)):
+            if miniBatchInputs[i] == x:
+                miniBatchInputs[i] = 1.0
+            else:
+                miniBatchInputs[i] = 0.0
+        miniBatchInputs = tuple(miniBatchInputs)
+        print(f'miniBatchInputs = {miniBatchInputs}')
+        output = tuple(miniBSplit[9])
+        print(f'Minibatch is {miniB}')
+        return output, miniB
+    
+
+
 def main():
-    miniBatch = np.array(([i] for i in input("Enter number")), dtype=None)
-    backpropagation.updateWB(self, miniBatch)
+    #transpose miniBatch for input layer
+    miniB = getMiniBatch()
+    miniBatch = np.transpose(miniB)
+    print(miniBatch)
+    time.sleep(2)
+
+    w = np.random.rand([miniBatch.shape, 3])
+    print(w)
+    time.sleep(2)
+
+    b = np.random.rand([miniBatch.shape, 3])
+    print(b)
+    time.sleep(2)
+
+    learningRate = input("Learning rate = ")
+    #self is not within class
+    backprop1 = backpropagation(miniBatch, learningRate, w, b)
+    backprop1.updateWB
+
     
 if __name__ == "__main__":
     import doctest
