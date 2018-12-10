@@ -17,8 +17,33 @@ output = np.random.randint(0, 1, [1, 3])
 zList = np.dot(inputs, w)
 x = 0
 
+def getMiniBatch():
+    """Reads the ticTacToeData csv file, finds a line of code, and enters that into a list to create the first miniBatch. It also replaces each x, o, or b with either a one or a zero, and creates a list of inputs and outputs to be used in the rest of the network"""
+    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
+        miniB = dataFile.readline()
+        print({miniB})
+        time.sleep(2)
+        miniBSplit = miniB.split(",")
+        print(miniBSplit)
+        time.sleep(2)
+        miniBatchInputs = miniBSplit[0:8]
+        print(miniBatchInputs)
+        for i in range(len(miniBatchInputs)):
+            if miniBatchInputs[i] == 'x':
+                miniBatchInputs[i] = 1.0
+            else:
+                miniBatchInputs[i] = 0.0
+        miniBatchInputs = tuple(miniBatchInputs)
+        print(f'miniBatchInputs = {miniBatchInputs}')
+        output = miniBSplit[9]
+        print(output)
+        time.sleep(2)
+        print(f'Minibatch is {miniBatchInputs}')
+    return output, miniBatchInputs
+
 class backpropagation():
     
+ 
     def feedforward(self, z):
         """Feedforward part: finding weighted sum of the weights and inputs, then adds bias"""
         z = np.add(np.dot(inputs, w), b)
@@ -93,36 +118,20 @@ class backpropagation():
 
             self.b = (b - (learningRate/len(miniBatch))*nablaB for b, nablaB in zip(b, nablaB))
 
-def getMiniBatch():
-    with open("ticTacToeData.csv", "r", newline='') as dataFile:
-        miniB = dataFile.readline()
-        miniBSplit = miniB.split(",")
-        miniBatchInputs = miniB.split[0:8]
-        for i in range(len(miniBatchInputs)):
-            if miniBatchInputs[i] == x:
-                miniBatchInputs[i] = 1.0
-            else:
-                miniBatchInputs[i] = 0.0
-        miniBatchInputs = tuple(miniBatchInputs)
-        print(f'miniBatchInputs = {miniBatchInputs}')
-        output = tuple(miniBSplit[9])
-        print(f'Minibatch is {miniB}')
-        return output, miniB
-    
 
 
 def main():
     #transpose miniBatch for input layer
-    miniB = getMiniBatch()
-    miniBatch = np.transpose(miniB)
+    output, miniBatchInputs = getMiniBatch()
+    inputs = miniBatchInputs
     print(miniBatch)
     time.sleep(2)
 
-    w = np.random.rand([miniBatch.shape, 3])
+    w = np.random.randn([inputs.shape, 3])
     print(w)
     time.sleep(2)
 
-    b = np.random.rand([miniBatch.shape, 3])
+    b = np.random.randn([inputs.shape, 3])
     print(b)
     time.sleep(2)
 
