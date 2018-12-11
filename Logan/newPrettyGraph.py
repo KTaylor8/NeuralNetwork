@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-import numpy
+import matplotlib.animation as animation
+import numpy as np
 import csv
 
 #define empty lists to add numbers from csv to
@@ -48,23 +49,31 @@ listPercentage2 = [i*100 for i in listPercentage2]
 listPercentage3 = [i*100 for i in listPercentage3]
 
 #define x and y values
-#x is numbers between 0 and 958, with 958 of them
-x = numpy.linspace(0,957,958)
-#y is previous list, all numbers between 0 and 1
+# #x is numbers between 0 and 958, with 958 of them
+# x = np.linspace(0,957,958)
+# #y is previous list, all numbers between 0 and 1
 y1 = listPercentage1
 y2 = listPercentage2
 y3 = listPercentage3
 
-#plot the data on the graph
-plt.plot(x,y1,"r-",label="Test run 1")
-plt.plot(x,y2,"b-",label="Test run 2")
-plt.plot(x,y3,"y-",label="Test run 3")
+fig, ax = plt.subplots()
+xdata, ydata = [], []
+ln, = plt.plot([], [], 'ro', animated=True)
 
-#change axis labels
-plt.xlabel("Iteration")
-plt.ylabel("Percentage Correct")
-plt.title("Percentage Correct Over Time")
-plt.axis([0,958,0,100])
+def init():
+    plt.legend(loc="upper right")
+    plt.xlabel("Iteration")
+    plt.ylabel("Percentage Correct")
+    plt.title("Percentage Correct Over Time")
+    plt.axis([0,1000,0,100])
+    return ln,
 
-#show graph
+def update(frame):
+    xdata.append(frame)
+    ydata.append(y1[frame])
+    ln.set_data(xdata, ydata)
+    return ln,
+
+ani = animation.FuncAnimation(fig, update, frames=np.linspace(0, 1000, 1000),
+                    init_func=init, blit=True)
 plt.show()
