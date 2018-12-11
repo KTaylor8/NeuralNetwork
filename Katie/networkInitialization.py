@@ -13,22 +13,33 @@ class network():
 
     def __init__(self, layerSizes):
         """
-        This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the weights and biases.
+        This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
         """
         self.numLayers = len(layerSizes)
         self.layerSizes = layerSizes
-        # lists of 9 weights and 9 biases for each neuron in hidden layer
-        self.b = [random.uniform(0, 1) for i in range(layerSizes[1])]
-        self.w = [random.uniform(0, 1) for i in range(layerSizes[1])]
-        # self.b = [np.random.randn(y, 1) for y in layerSizes[1:]]
-        # self.w = [np.random.randn(y, x)
-        #           for x, y in zip(layerSizes[:-1], layerSizes[1:])]
-        print(
-            f"Number of layers = {self.numLayers}\n"
-            f"Sizes of layers = {self.layerSizes}\n"
-            f"Initial biases = {self.b}\n"
-            f"Initial weights = {self.w}\n"
-        )
+        # lists in which each element is an array for each layer, which each contain the connections/neurons for that layer: weight for each connection (90) and a bias for each hidden and output neuron (10)
+        self.w = [np.random.rand(y, x)
+                  for x, y in zip(layerSizes[:-1], layerSizes[1:])]
+        self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
+        # self.numW = sum(np.prod((self.w[i]).shape) for i in range(len(self.w)))
+        # self.numB = sum(np.prod((self.b[i]).shape) for i in range(len(self.b)))
+        # print(  # debugging
+        #     f"Number of layers = {self.numLayers}\n"
+        #     f"Sizes of layers = {self.layerSizes}\n"
+        #     f"Initial weights = {self.w}\n"
+        #     f"# w = {self.numW}\n"
+        #     f"Initial biases = {self.b}\n"
+        #     f"# b = {self.numB}\n"
+        # )
+
+        # self.w = [
+        #     random.uniform(0, 1) for i in range(
+        #         layerSizes[0]*layerSizes[1] +  # connections: input + hidden
+        #         layerSizes[1]*layerSizes[2])  # connections: hidden + output
+        # ]
+        # self.b = [
+        #     random.uniform(0, 1) for i in range(sum(layerSizes[1:]))
+        # ]  # each neuron after the input layer
 
     def inputMinibatch(self):
         """
@@ -37,8 +48,8 @@ class network():
         with open("ticTacToeData.csv", "r", newline='') as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             # for minibatch in dataFile:  # each row begins as string
-            minibatch = dataFile.readline()
-            print(f'minibatch: {minibatch}')  # debugging
+            minibatch = dataFile.readline()  # need to iterate over all lines
+            # print(f'minibatch: {minibatch}')  # debugging
             minibatchSplit = minibatch.split(",")  # split string into list
             minibatchInputs = minibatchSplit[0:8]
             for i in range(len(minibatchInputs)):
@@ -47,29 +58,68 @@ class network():
                 else:  # if o or b
                     minibatchInputs[i] = 0.0
             minibatchInputs = tuple(minibatchInputs)
-            print(f'minibatchInputs: {minibatchInputs}')  # debugging
+            # print(f'minibatchInputs: {minibatchInputs}')  # debugging
             theoreticalOutput = tuple(minibatchSplit[9])
             # for inputNum in range(len(minibatchInputs)):
-            inputNum = 0  # one input
+            inputNum = 0  # debugging one input
             expOutput = self.feedforward(
-                minibatchInputs[inputNum],                                 inputNum)  # output for one input
-            # add to list of outputs for all inputs
-            print(f'exp output: {expOutput}')  # debugging
+                minibatchInputs)
+            # print(f'final exp output: {expOutput}')  # debugging
 
-    def feedforward(self, neuronInput, inputNum):
+    def feedforward(self, inList):
         """
-        Runs a neuron input through all layers in a network and returns an output for the network. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
+        Runs all network inputs through all layers in a network and returns an experimental output for the network. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
         """
-        # to test, send an input through a single neuron in the hidden layer and then the output layer to produce one experimental output
-        sigOutputList = []  # outputs through all neurons for one input put into network
-        # need to distinguish between neuron and layer values
-        for neuron in range(self.numLayers-1):
-            print(f'Neuron weight: {self.w[neuron]}')  # debugging
-            neuronOutput = self.sigmoid(
-                np.dot(self.w[neuron], neuronInput)+self.b[neuron])
-            sigOutputList.append(neuronOutput)
-            # currently a list of hidden neuron sigmoid outputs (only the 1st one, in this case) but I need it to be an experimental output of positive or negative for the whole network
-        return sigOutputList
+        # for layer in range(len(self.layerSizes)-1):  # num layers #debugging
+        layer = 0
+        layerOutList = []
+        # pass inputs into 1 as many receiving neurons as there are in the next layer:
+        for receivingN in range(self.layerSizes[layer]):  # debugging
+            # pass each input into that specific receiving neuron
+            neuronOutList = []  # outputs from a neuron when fed all inputs
+            # for each input that the receiving neuron receives:
+            for inNum in range(len(inList)):
+                # for neuron in range(self.layerSizes[layerI+1]): don't think needed
+                hiddenW = self.w[layer][receivingN][inNum]
+                hiddenB = self.b[layer][receivingN][0]
+                print(
+                    f'receiving neuron #: {receivingN}'
+                    f'\t1 hidden w for 1 connection: {hiddenW:<19}'
+                    f'\t1 hidden b for 1 connection: {hiddenB}')
+                neuronOutArr = self.sigmoid(
+                    np.dot(hiddenW, inList)+hiddenB
+                )
+                neuronOutList.append(neuronOutArr[0])
+            inList = neuronOutList
+            # print('hiddenOutputList: ', hiddenOutputList)  # debugging
+
+            # DO SOMETHING W/ LAYEROUTLIST OR REMOVE IT IF UNNECESSARY W/ INLIST
+
+        rawExpOut = inList
+        # # for loop not really necessary since we only have 1 output neuron
+        # for neuron in range(self.layerSizes[layerI+1]):
+        #     print(f"Initial weights = {self.w}\n")
+        #     print(f'output layer weights: {self.w[layerI][0]}')
+        #     outputW = self.w[layerI][0][neuron]
+        #     # print(f"Initial biases = {self.b}\n")
+        #     # print(f'output layer bias: {self.b[layerI][0][0]}')
+        #     # doesn't change throughout feedforward() b/c there's only 1 output neuron that all connections go through
+        #     outputB = self.b[layerI][0][0]
+        #     print(
+        #         f'neuron #: {neuron}'
+        #         f'\t1 hidden w for 1 connection: {hiddenW}'
+        #         f'\t1 hidden b for 1 connection: {hiddenB}')
+        #     finalNeuronOutputArr = self.sigmoid(
+        #         np.dot(outputW, hiddenOutputList)+outputB
+        #     )
+        #     finalNeuronOutput = finalNeuronOutputArr[0]
+        print(f'network raw output: {rawExpOut}')  # debugging
+        # expOutput = round(finalNeuronOutput) #commented out for debugging
+        # if expOutput == 0:
+        #     expOutput == "negative"
+        # elif expOutput == 1:
+        #     expOutput == "positive"
+        # return expOutput #NOT SURE IF I'M SUPPOSED TO HAVE A POSITIVE AND NEGATIVE FOR EVERY NEURON (LIKE IT IS NOW) OR ONLY THE WHOLE NETWORK; IF IT'S THE WHOLE NETWORK, WHAT DO I DO WITH THE OUTPUT FOR EACH INDIVIDUAL INPUT?
 
     def sigmoid(self, dotProdSum):
         """
