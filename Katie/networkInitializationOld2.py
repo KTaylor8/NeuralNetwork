@@ -63,54 +63,55 @@ class network():
             # for inputNum in range(len(minibatchInputs)):
             inputNum = 0  # debugging one input
             expOutput = self.feedforward(
-                minibatchInputs[inputNum], inputNum)  # output for one input
-            # add to list of outputs for all inputs
+                minibatchInputs)
             # print(f'final exp output: {expOutput}')  # debugging
 
-    def feedforward(self, neuronInput, inputNum):
+    def feedforward(self, inList):
         """
-        Runs a network input through all layers in a network and returns an experimental output for the network. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
+        Runs all network inputs through all layers in a network and returns an experimental output for the network. Each index in the minibatchInputs list corresponds to a neuron in the input and hidden layers.
         """
-        # to test, send an input through a single neuron in the hidden layer and then the output layer to produce one experimental output
-        hiddenOutputList = []  # outputs from all hidden neurons for one input put into network
-        layer = 0  # hidden layer; nums based on w and b lists
-        for neuron in range(self.layerSizes[layer+1]):  # num neurons in hidden
-            """self.w[{layer #}] = input num in list w
-            # {array}.item({list #},{el #}):
-            # {array}.item(inputNum, neuron) = el for connection weight in a list of each neuron's connection weights in array for space between layers"""
-            hiddenW = self.w[layer][inputNum][neuron]
-            hiddenB = self.b[layer][neuron]
-            # print(
-            #     f'neuron #: {neuron}'
-            #     f'\t1 hidden w for 1 connection: {hiddenW}'
-            #     f'\t1 hidden b for 1 connection: {hiddenB}')
-            neuronOutputArr = self.sigmoid(
-                np.dot(hiddenW, neuronInput)+hiddenB
-            )
-            neuronOutput = neuronOutputArr[0]
-            hiddenOutputList.append(neuronOutput)
-        # print('hiddenOutputList: ', hiddenOutputList)  # debugging
+        # for layer in range(len(self.layerSizes)-1):  # num layers #debugging
+        layer = 0
+        layerOutList = []
+        # pass inputs into a receiving neuron for as many receiving neurons as there are in the next layer:
+        for receivingN in range(self.layerSizes[layer]):
+            neuronOutList = []  # outputs from a neuron when fed all inputs
+            # for each input that the receiving neuron receives:
+            for inNum in range(len(inList)):
+                # for neuron in range(self.layerSizes[layerI+1]): don't think needed
+                neuronWs = self.w[layer][receivingN]
+                neuronBs = self.b[layer][receivingN][0]
+                print(
+                    f'receiving neuron #: {receivingN}'
+                    f'\t1 hidden w for 1 connection: {neuronWs}'
+                    f'\t1 hidden b for 1 connection: {hiddenB}')
+                neuronOutArr = self.sigmoid(
+                    np.dot(hiddenW, inList)+hiddenB
+                )
+                neuronOutList.append(neuronOutArr[0])
+            inList.append(neuronOutList)
+            append(neuronInList)
+            # print('hiddenOutputList: ', hiddenOutputList)  # debugging
 
-        layer = 1  # output layer
-        # num neurons in output layer
-        # for loop not really necessary since we only have 1 output neuron
-        for neuron in range(self.layerSizes[layer+1]):
-            print(f"Initial weights = {self.w}\n")
-            print(f'output layer weights: {self.w[layer][0]}')
-            outputW = self.w[layer][0][neuron]
-            # print(f"Initial biases = {self.b}\n")
-            # print(f'output layer bias: {self.b[layer][0][0]}')
-            # doesn't change throughout feedforward() b/c there's only 1 output neuron that all connections go through
-            outputB = self.b[layer][0][0]
-            print(
-                f'neuron #: {neuron}'
-                f'\t1 hidden w for 1 connection: {hiddenW}'
-                f'\t1 hidden b for 1 connection: {hiddenB}')
-            finalNeuronOutputArr = self.sigmoid(
-                np.dot(outputW, hiddenOutputList)+outputB
-            )
-            finalNeuronOutput = finalNeuronOutputArr[0]
-        print(f'network output for 1 input: {finalNeuronOutput}')  # debugging
+        rawExpOut = inList
+        # # for loop not really necessary since we only have 1 output neuron
+        # for neuron in range(self.layerSizes[layerI+1]):
+        #     print(f"Initial weights = {self.w}\n")
+        #     print(f'output layer weights: {self.w[layerI][0]}')
+        #     outputW = self.w[layerI][0][neuron]
+        #     # print(f"Initial biases = {self.b}\n")
+        #     # print(f'output layer bias: {self.b[layerI][0][0]}')
+        #     # doesn't change throughout feedforward() b/c there's only 1 output neuron that all connections go through
+        #     outputB = self.b[layerI][0][0]
+        #     print(
+        #         f'neuron #: {neuron}'
+        #         f'\t1 hidden w for 1 connection: {hiddenW}'
+        #         f'\t1 hidden b for 1 connection: {hiddenB}')
+        #     finalNeuronOutputArr = self.sigmoid(
+        #         np.dot(outputW, hiddenOutputList)+outputB
+        #     )
+        #     finalNeuronOutput = finalNeuronOutputArr[0]
+        print(f'network raw output: {rawExpOut}')  # debugging
         # expOutput = round(finalNeuronOutput) #commented out for debugging
         # if expOutput == 0:
         #     expOutput == "negative"

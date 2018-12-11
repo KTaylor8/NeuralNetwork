@@ -58,7 +58,7 @@ y3 = listPercentage3
 
 fig, ax = plt.subplots()
 xdata, ydata = [], []
-ln, = plt.plot([], [], 'ro', animated=True)
+ln, = plt.plot([], [], 'r-', animated=True)
 
 def init():
     plt.legend(loc="upper right")
@@ -70,10 +70,10 @@ def init():
 
 def update(frame):
     xdata.append(frame)
-    ydata.append(y1[frame])
+    ydata.append(y1[int(frame)])
     ln.set_data(xdata, ydata)
     return ln,
 
-ani = animation.FuncAnimation(fig, update, frames=np.linspace(0, 1000, 1000),
+ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 98),
                     init_func=init, blit=True)
 plt.show()
