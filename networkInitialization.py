@@ -89,13 +89,20 @@ class network():
             inList = rawOut  # my addition to account for the 2 layer spaces
             # 1st iteration returns an array of 9 single element lists
             # break
-        expOut = np.sign(rawOut[0][0])
-        print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
 
-        # if expOut == 1.0 or expOut == 0.0: #NOT SURE WHAT TO DO IF == 0
+        # expOut = np.sign(rawOut[0][0]) #threshold based on sign, but always +
+        # if expOut == 1.0 or expOut == 0.0:  # NOT SURE WHAT TO DO IF == 0
         #     expOut = "positive"
         # elif expOut == -1.0:
         #     expOut = "negative"
+
+        expOut = round(rawOut[0][0])  # threshold based on rounding
+        if expOut == 1.0:
+            expOut = "positive"
+        elif expOut == 0.0:
+            expOut = "negative"
+        print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
+
         # return expOut
 
     def sigmoid(self, dotProdSum):
