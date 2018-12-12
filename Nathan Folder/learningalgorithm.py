@@ -46,7 +46,19 @@ def getMiniBatch():
 
 class backpropagation():
     
- 
+    def __init__(self, inputs, learningRate, numLayers, w, b):
+        self.inputs = inputs
+        self.numLayers = int(len(inputs))
+        self.w = w
+        print(self.w)
+        time.sleep(2)
+
+        self.b = b
+        print(self.b)
+        time.sleep(2)
+
+        self.learningRate = input("Learning rate = ")
+        
     def feedforward(self, z):
         """Feedforward part: finding weighted sum of the weights and inputs, then adds bias"""
         z = np.add(np.dot(inputs, w), b)
@@ -62,9 +74,9 @@ class backpropagation():
         sp = (self.sigmoid(s) - self.sigmoid(s)**2)
         return sp
 
-    def costderivative(self, output, y):
+    def costderivative(self, s, y):
         """Function for the derivative of the cost function. Used to find the error of each neuron"""
-        return (output - y)
+        return (s - y)
 
     def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
     = None):
@@ -91,7 +103,7 @@ class backpropagation():
             zList.append(z)
             activations = (self.sigmoid(x) for x in zList)
 
-            errorL = self.costderivative((activations[numLayers], (y for y in output))) * self.sigmoidprime(z[numLayers])
+            errorL = self.costderivative((activations[numLayers], output)) * self.sigmoidprime(z[numLayers])
 
             nablaB[numLayers] = errorL
             nablaW[numLayers] = np.dot(errorL, activations[numLayers - 1].transpose())
@@ -108,8 +120,8 @@ class backpropagation():
     def updateWB(self, inputs, learningRate, w, b):
         """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
     
-        nablaW = np.zeros((w.shape) for x in self.w)
-        nablaB = np.zeros((b.shape) for x in self.b)
+        nablaW = np.zeros(w.shape)
+        nablaB = np.zeros(b.shape)
 
         for [x, y] in miniBatch:
             deltaNablaB, deltaNablaW = self.backprop(self, x, y, numLayers)
@@ -132,23 +144,24 @@ def main():
     print(output)
     print(miniBatchInputs)
     inputs = miniBatchInputs
-    print(miniBatch)
+    inputs = np.transpose(inputs)
+    print(inputs)
     time.sleep(2)
 
     numLayers = int(len(inputs))
 
-    w = [np.random.randn(numLayers,3)]
+    w = [np.random.rand(numLayers,3)]
     print(w)
     time.sleep(2)
 
-    b = [np.random.randn(numLayers, 3)]
+    b = [np.random.rand(numLayers, 3)]
     print(b)
     time.sleep(2)
 
     learningRate = input("Learning rate = ")
     #self is not within class
-    backprop1 = backpropagation(inputs, learningRate, w, b)
-    backprop1.updateWB
+    backprop1 = backpropagation(inputs, learningRate, numLayers, w, b)
+    backprop1.updateWB(inputs, learningRate, w, b)
 
     
 if __name__ == "__main__":
