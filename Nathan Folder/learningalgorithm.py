@@ -10,8 +10,6 @@ miniBatch = np.random.randint(0, high=1, size=[3, 0])
 numLayers = len(miniBatch)
 w = np.random.randint(0, 1, size=[3, 3])
 b = np.random.randint(0, 1, size=[3, 3])
-miniBatch = np.random.randint(0, high=1, size=[3, 0])
-numLayers = len(miniBatch)
 inputs = np.random.randint(0, 1, size=[3, 3])
 output = np.random.randint(0, 1, [1, 3])
 zList = np.dot(inputs, w)
@@ -23,18 +21,23 @@ def getMiniBatch():
         miniB = dataFile.readline()
         print({miniB})
         time.sleep(2)
+
         miniBSplit = miniB.split(",")
         print(miniBSplit)
         time.sleep(2)
+
         miniBatchInputs = miniBSplit[0:8]
         print(miniBatchInputs)
+
         for i in range(len(miniBatchInputs)):
             if miniBatchInputs[i] == 'x':
                 miniBatchInputs[i] = 1.0
             else:
                 miniBatchInputs[i] = 0.0
+
         miniBatchInputs = tuple(miniBatchInputs)
         print(f'miniBatchInputs = {miniBatchInputs}')
+
         output = miniBSplit[9]
         print(output)
         time.sleep(2)
@@ -70,6 +73,7 @@ class backpropagation():
             miniBatches = [trainingData[k:k+miniBatchSize] for k in range(0, n, miniBatchSize)]
         for miniBatch in miniBatches:
             self.updateWB(miniBatch, learningRate, w, b)
+
             """Still working on how to end an epoch/exit out of program"""
 
         if testData:
@@ -101,7 +105,7 @@ class backpropagation():
 
             return nablaB, nablaW
 
-    def updateWB(self, miniBatch, learningRate, w, b):
+    def updateWB(self, inputs, learningRate, w, b):
         """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
     
         nablaW = np.zeros((w.shape) for x in self.w)
@@ -123,21 +127,27 @@ class backpropagation():
 def main():
     #transpose miniBatch for input layer
     output, miniBatchInputs = getMiniBatch()
+
+    #Debugging
+    print(output)
+    print(miniBatchInputs)
     inputs = miniBatchInputs
     print(miniBatch)
     time.sleep(2)
 
-    w = np.random.randn([inputs.shape, 3])
+    numLayers = int(len(inputs))
+
+    w = [np.random.randn(numLayers,3)]
     print(w)
     time.sleep(2)
 
-    b = np.random.randn([inputs.shape, 3])
+    b = [np.random.randn(numLayers, 3)]
     print(b)
     time.sleep(2)
 
     learningRate = input("Learning rate = ")
     #self is not within class
-    backprop1 = backpropagation(miniBatch, learningRate, w, b)
+    backprop1 = backpropagation(inputs, learningRate, w, b)
     backprop1.updateWB
 
     
