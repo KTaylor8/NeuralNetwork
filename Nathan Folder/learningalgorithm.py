@@ -104,9 +104,9 @@ class backpropagation():
         sp = (self.sigmoid(s) - self.sigmoid(s)**2)
         return sp
 
-    def costderivative(self, s, y):
+    def costderivative(self, expOutput, output):
         """Function for the derivative of the cost function. Used to find the error of each neuron"""
-        return (s - y)
+        return (expOutput - output)
 
     def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
     = None):
@@ -139,7 +139,7 @@ class backpropagation():
             zList.append(z)
             activations = (self.sigmoid(x) for x in zList)
 
-            errorL = self.costderivative((activations[numLayers], output)) * self.sigmoidprime(z[numLayers])
+            errorL = self.costderivative((expOutput, output)) * self.sigmoidprime(z[numLayers])
 
             deltaNablaB = errorL
             deltaNablaW = np.dot(errorL, activations[numLayers - 1].transpose())
