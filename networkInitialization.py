@@ -18,9 +18,47 @@ class network():
         self.numLayers = len(layerSizes)
         self.layerSizes = layerSizes
         # lists in which each element is an array for each layer, which each contain the connections/neurons for that layer: weight for each connection (90) and a bias for each hidden and output neuron (10)
-        self.w = [np.random.rand(y, x)
-                  for x, y in zip(layerSizes[:-1], layerSizes[1:])]
-        self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
+
+        allWList = []
+        allBList = []
+
+        for layer in range(len(layerSizes)-1):
+            wInLayerList = []
+
+            for receivingN in range(layerSizes[layer+1]):
+                wForNeuronList = []
+
+                for givingN in range(layerSizes[layer]):
+                    wForNeuronList.append(random.uniform(-1, 1))
+
+                wInLayerList.append(wForNeuronList)
+
+            wInLayerArray = np.reshape(
+                (np.asarray(wInLayerList)),
+                (self.layerSizes[layer+1], self.layerSizes[layer])
+            )
+            allWList.append(wInLayerArray)
+
+        self.w = allWList
+
+        for layer in range(len(layerSizes)-1):
+            bInLayerList = []
+
+            for neuron in range(layerSizes[layer+1]):
+                bInLayerList.append(random.uniform(-1, 1))
+
+            bInLayerArray = np.reshape(
+                (np.asarray(bInLayerList)),
+                (self.layerSizes[layer+1], 1)
+            )
+            allBList.append(bInLayerArray)
+
+        self.b = allBList
+
+        # alternate generation code limited to range [0, 1):
+        # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
+        # self.w = [np.random.rand(y, x)
+        #       for x, y in zip(layerSizes[:-1], layerSizes[1:])])
 
     def inputMinibatch(self):
         """
@@ -29,11 +67,8 @@ class network():
         with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             for minibatch in dataFile:  # each row begins as string
-                minibatch = dataFile.readline()  # need to iterate over all lines
-                # print(f'minibatch: {minibatch}')  # debugging
-                minibatchSplit = minibatch.split(",")  # split string into list
+                minibatchSplit = minibatch.strip().split(",")
                 minibatchInputs = minibatchSplit[0:9]  # end is exclusive
-                theoreticalOutput = tuple(minibatchSplit[9])
                 for i in range(len(minibatchInputs)):
                     if minibatchInputs[i] == "x":
                         minibatchInputs[i] = 1.0
@@ -44,7 +79,8 @@ class network():
                     (self.layerSizes[0], 1)
                 )  # (rows, columns)
                 expOutput = self.feedforward(inputs)
-                print(expOutput)
+                # print(expOutput)
+                theoreticalOutput = tuple(minibatchSplit[9])
 
     def feedforward(self, inList):
         """Return the output of the network if the inList of inputs is received."""
@@ -53,12 +89,21 @@ class network():
             inList = rawOut  # my addition to account for the 2 layer spaces
             # 1st iteration returns an array of 9 single element lists
             # break
-        expOut = round(rawOut[0][0])
-        if expOut == 0.0:
-            expOut = "negative"
-        elif expOut == 1.0:
+
+        # expOut = np.sign(rawOut[0][0]) #threshold based on sign, but always +
+        # if expOut == 1.0 or expOut == 0.0:  # NOT SURE WHAT TO DO IF == 0
+        #     expOut = "positive"
+        # elif expOut == -1.0:
+        #     expOut = "negative"
+
+        expOut = round(rawOut[0][0])  # threshold based on rounding
+        if expOut == 1.0:
             expOut = "positive"
-        return expOut
+        elif expOut == 0.0:
+            expOut = "negative"
+        print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
+
+        # return expOut
 
     def sigmoid(self, dotProdSum):
         """
