@@ -148,7 +148,7 @@ class network():
                 rawOut = self.sigmoid(np.dot(wArray, inputs)+bArray)
                 inputs = rawOut
 
-            errorL = self.costderivative((activations[numLayers], tOutput)) * self.sigmoidprime(z[numLayers])
+            errorL = self.costderivative(activations[numLayers], tOutput) * self.sigmoidprime(z[numLayers]) #activations of second to last layer
 
             deltaNablaB = errorL
             deltaNablaW = np.dot(errorL, activations[numLayers - 1].transpose())
