@@ -18,6 +18,8 @@ x = 0
 def getMiniBatch():
     """Reads the ticTacToeData csv file, finds a line of code, and enters that into a list to create the first miniBatch. It also replaces each x, o, or b with either a one or a zero, and creates a list of inputs and outputs to be used in the rest of the network"""
     with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
+        trainingData = tuple(dataFile)
+
         miniB = dataFile.readline()
         print({miniB})
         time.sleep(2)
@@ -42,7 +44,7 @@ def getMiniBatch():
         print(output)
         time.sleep(2)
         print(f'Minibatch is {miniBatchInputs}')
-    return output, miniBatchInputs
+    return output, miniBatchInputs, trainingData
 
 class backpropagation():
     
@@ -53,6 +55,7 @@ class backpropagation():
         print(self.w)
         time.sleep(2)
 
+        self.trainingData = trainingData
         self.b = b
         print(self.b)
         time.sleep(2)
@@ -80,6 +83,12 @@ class backpropagation():
 
     def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
     = None):
+        """This part of the program will 
+        create the miniBatch from the epoch
+        run the gradient descent on that miniBatch
+        repeat for remaining epoch
+        switch to next epoch
+        End program when test data runs out"""
         n = len(trainingData)
         for k in range(epochs):
             miniBatches = [trainingData[k:k+miniBatchSize] for k in range(0, n, miniBatchSize)]
@@ -123,8 +132,8 @@ class backpropagation():
         nablaW = np.zeros(w.shape)
         nablaB = np.zeros(b.shape)
 
-        for [x, y] in miniBatch:
-            deltaNablaB, deltaNablaW = self.backprop(self, x, y, numLayers)
+        for [input, output] in miniBatch:
+            deltaNablaB, deltaNablaW = self.backprop(self, nablaB, nablaW, numLayers)
 
             nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
@@ -138,7 +147,7 @@ class backpropagation():
 
 def main():
     #transpose miniBatch for input layer
-    output, miniBatchInputs = getMiniBatch()
+    output, miniBatchInputs, trainingData = getMiniBatch()
 
     #Debugging
     print(output)

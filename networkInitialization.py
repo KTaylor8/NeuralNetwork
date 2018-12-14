@@ -26,7 +26,7 @@ class network():
         """
         Reads csv file with data line by line (each line is a minibatch), converts input "x"s to 1 and "o"s and "b"s to 0, converts the line of data into two tuples of single item strings: the inputs and the theoretical output, and feeds forward each minibatch's inputs into the network.
         """
-        with open("ticTacToeData.csv", "r", newline='') as dataFile:
+        with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             for minibatch in dataFile:  # each row begins as string
                 minibatch = dataFile.readline()  # need to iterate over all lines
