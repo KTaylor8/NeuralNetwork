@@ -80,13 +80,13 @@ class network():
                 )  # (rows, columns)
                 expOutput = self.feedforward(inputs)
                 # print(expOutput)
-                theoreticalOutput = tuple(minibatchSplit[9])
+                tOutput = tuple(minibatchSplit[9])
 
-    def feedforward(self, inList):
+    def feedforward(self, inputs):
         """Return the output of the network if the inList of inputs is received."""
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
-            rawOut = self.sigmoid(np.dot(wArray, inList)+bArray)
-            inList = rawOut  # my addition to account for the 2 layer spaces
+            rawOut = self.sigmoid(np.dot(wArray, inputs)+bArray)
+            inputs = rawOut  # my addition to account for the 2 layer spaces
             # 1st iteration returns an array of 9 single element lists
             # break
 
@@ -110,6 +110,77 @@ class network():
         """
         sigOutput = 1/(1+(math.e**((-1)*dotProdSum)))
         return sigOutput
+
+    def sigmoidprime(self, s):
+        """Function for the derivative of the activation function. Used to find the error of each neuron"""
+        sp = (self.sigmoid(s) - self.sigmoid(s)**2)
+        return sp
+
+    def costderivative(self, expOutput, tOutput):
+        """Function for the derivative of the cost function. Used to find the error of each neuron"""
+        return (expOutput - tOutput)
+
+    def SGD(self, trainingData, epochs, miniBatchSize, learningRate, testData
+    = None):
+        """This part of the program will 
+        create the miniBatch from the epoch
+        run the gradient descent on that miniBatch
+        repeat for remaining epoch
+        switch to next epoch
+        End program when test data runs out"""
+        n = len(trainingData)
+        for k in range(epochs):
+            miniBatches = [trainingData[k:k+miniBatchSize] for k in range(0, n, miniBatchSize)]
+        for miniBatch in miniBatches:
+            self.updateWB(miniBatch, learningRate, self.w, self.b)
+
+            """Still working on how to end an epoch/exit out of program"""
+
+        if testData:
+            print ("Epoch Over")
+
+    def backprop(self, inputs, tOutput, numLayers):
+            """This function calculates the rate of change of the cost function and the biases/weights, uses that to find the error of each neuron, and uses the error to calculate the change in weights and biases. Variables are self, the change in b and a, and the number of layers in a minibatch"""
+            #define activation, weighted inputs, and set up all lists/tuples
+            
+            """Feedforward section of the network. Calculates the activation for each neuron of the network and """
+            for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
+                rawOut = self.sigmoid(np.dot(wArray, inputs)+bArray)
+                inputs = rawOut
+
+            errorL = self.costderivative((activations[numLayers], tOutput)) * self.sigmoidprime(z[numLayers])
+
+            deltaNablaB = errorL
+            deltaNablaW = np.dot(errorL, activations[numLayers - 1].transpose())
+
+            for l in range(2, numLayers):
+                z = zList[numLayers]
+                sp = self.sigmoidprime(z)
+                errorL = np.dot(self.w[-l+1].transpose(), errorL) * sp
+                nablaB = errorL
+                nablaW = np.dot(errorL, activations[-l-1].transpose())
+
+            return deltaNablaB, deltaNablaW
+
+    def updateWB(self, inputs, learningRate, w, b):
+        """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
+    
+        nablaW = np.zeros(w[0].shape)
+        print(nablaW)
+        nablaB = np.zeros(b[0].shape)
+        print(nablaB)
+
+        for [inputs, tOutput] in miniBatch:
+            deltaNablaB, deltaNablaW = self.backprop(inputs, tOutputs, numLayers)
+
+            nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
+
+            nablaB = (nablaB + deltaNablaB for nablaB, deltaNablaB in zip(nablaB, deltaNablaB))
+
+            self.w = (w - (learningRate/len(miniBatch))*nablaW for w, nablaW in zip(w, nablaW))
+
+            self.b = (b - (learningRate/len(miniBatch))*nablaB for b, nablaB in zip(b, nablaB))
+
 
 
 def main():
