@@ -101,9 +101,8 @@ class network():
             expOut = "positive"
         elif expOut == 0.0:
             expOut = "negative"
-        print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
-
-        # return expOut
+        #print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
+        return expOut
 
     def sigmoid(self, dotProdSum):
         """
