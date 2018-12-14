@@ -15,52 +15,79 @@ output = np.random.randint(0, 1, [1, 3])
 zList = np.dot(inputs, w)
 x = 0
 
-def getMiniBatch():
-    """Reads the ticTacToeData csv file, finds a line of code, and enters that into a list to create the first miniBatch. It also replaces each x, o, or b with either a one or a zero, and creates a list of inputs and outputs to be used in the rest of the network"""
-    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
-        trainingData = tuple(dataFile)
-
-        miniB = dataFile.readline()
-        print({miniB})
-        time.sleep(2)
-
-        miniBSplit = miniB.split(",")
-        print(miniBSplit)
-        time.sleep(2)
-
-        miniBatchInputs = miniBSplit[0:8]
-        print(miniBatchInputs)
-
-        for i in range(len(miniBatchInputs)):
-            if miniBatchInputs[i] == 'x':
-                miniBatchInputs[i] = 1.0
-            else:
-                miniBatchInputs[i] = 0.0
-
-        miniBatchInputs = tuple(miniBatchInputs)
-        print(f'miniBatchInputs = {miniBatchInputs}')
-
-        output = miniBSplit[9]
-        print(output)
-        time.sleep(2)
-        print(f'Minibatch is {miniBatchInputs}')
-    return output, miniBatchInputs, trainingData
-
 class backpropagation():
     
-    def __init__(self, inputs, learningRate, numLayers, w, b):
-        self.inputs = inputs
-        self.numLayers = int(len(inputs))
-        self.w = w
-        print(self.w)
-        time.sleep(2)
+    def __init__(self, layerSizes):
+        """
+        This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
+        """
+        self.numLayers = len(layerSizes)
+        self.layerSizes = layerSizes
+        # lists in which each element is an array for each layer, which each contain the connections/neurons for that layer: weight for each connection (90) and a bias for each hidden and output neuron (10)
 
-        self.trainingData = trainingData
-        self.b = b
-        print(self.b)
-        time.sleep(2)
+        allWList = []
+        allBList = []
 
-        self.learningRate = input("Learning rate = ")
+        for layer in range(len(layerSizes)-1):
+            wInLayerList = []
+
+            for receivingN in range(layerSizes[layer+1]):
+                wForNeuronList = []
+
+                for givingN in range(layerSizes[layer]):
+                    wForNeuronList.append(random.uniform(-1, 1))
+
+                wInLayerList.append(wForNeuronList)
+
+            wInLayerArray = np.reshape(
+                (np.asarray(wInLayerList)),
+                (self.layerSizes[layer+1], self.layerSizes[layer])
+            )
+            allWList.append(wInLayerArray)
+
+        self.w = allWList
+
+        for layer in range(len(layerSizes)-1):
+            bInLayerList = []
+
+            for neuron in range(layerSizes[layer+1]):
+                bInLayerList.append(random.uniform(-1, 1))
+
+            bInLayerArray = np.reshape(
+                (np.asarray(bInLayerList)),
+                (self.layerSizes[layer+1], 1)
+            )
+            allBList.append(bInLayerArray)
+
+        self.b = allBList
+
+        # alternate generation code limited to range [0, 1):
+        # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
+        # self.w = [np.random.rand(y, x)
+        #       for x, y in zip(layerSizes[:-1], layerSizes[1:])])
+
+    def inputMinibatch(self):
+        """
+        Reads csv file with data line by line (each line is a minibatch), converts input "x"s to 1 and "o"s and "b"s to 0, converts the line of data into two tuples of single item strings: the inputs and the theoretical output, and feeds forward each minibatch's inputs into the network.
+        """
+        with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", "r", newline='') as dataFile:
+            # non-subscriptable objects aren't containers and don't have indices
+            for minibatch in dataFile:  # each row begins as string
+                minibatchSplit = minibatch.strip().split(",")
+                minibatchInputs = minibatchSplit[0:9]  # end is exclusive
+                for i in range(len(minibatchInputs)):
+                    if minibatchInputs[i] == "x":
+                        minibatchInputs[i] = 1.0
+                    else:  # if o or b
+                        minibatchInputs[i] = 0.0
+                inputs = np.reshape(
+                    (np.asarray(minibatchInputs)),
+                    (self.layerSizes[0], 1)
+                )  # (rows, columns)
+                expOutput = self.feedforward(inputs)
+                # print(expOutput)
+                theoreticalOutput = tuple(minibatchSplit[9])
+
         
     def feedforward(self, z):
         """Feedforward part: finding weighted sum of the weights and inputs, then adds bias"""
@@ -100,7 +127,7 @@ class backpropagation():
         if testData:
             print ("Epoch Over")
 
-    def backprop(self, nablaB, nablaW, numLayers):
+    def backprop(self, inputs, outputs, numLayers):
             """This function calculates the rate of change of the cost function and the biases/weights, uses that to find the error of each neuron, and uses the error to calculate the change in weights and biases. Variables are self, the change in b and a, and the number of layers in a minibatch"""
             #define activation, weighted inputs, and set up all lists/tuples
             activation = x
@@ -114,8 +141,8 @@ class backpropagation():
 
             errorL = self.costderivative((activations[numLayers], output)) * self.sigmoidprime(z[numLayers])
 
-            nablaB[numLayers] = errorL
-            nablaW[numLayers] = np.dot(errorL, activations[numLayers - 1].transpose())
+            deltaNablaB = errorL
+            deltaNablaW = np.dot(errorL, activations[numLayers - 1].transpose())
 
             for l in range(2, numLayers):
                 z = zList[numLayers]
@@ -124,16 +151,18 @@ class backpropagation():
                 nablaB = errorL
                 nablaW = np.dot(errorL, activations[-l-1].transpose())
 
-            return nablaB, nablaW
+            return deltaNablaB, deltaNablaW
 
     def updateWB(self, inputs, learningRate, w, b):
         """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
     
-        nablaW = np.zeros(w.shape)
-        nablaB = np.zeros(b.shape)
+        nablaW = np.zeros(w[0].shape)
+        print(nablaW)
+        nablaB = np.zeros(b[0].shape)
+        print(nablaB)
 
-        for [input, output] in miniBatch:
-            deltaNablaB, deltaNablaW = self.backprop(self, nablaB, nablaW, numLayers)
+        for [inputs, outputs] in miniBatch:
+            deltaNablaB, deltaNablaW = self.backprop(inputs, outputs, numLayers)
 
             nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
 
@@ -147,7 +176,7 @@ class backpropagation():
 
 def main():
     #transpose miniBatch for input layer
-    output, miniBatchInputs, trainingData = getMiniBatch()
+    output, miniBatchInputs = getMiniBatch()
 
     #Debugging
     print(output)
