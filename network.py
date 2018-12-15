@@ -3,10 +3,6 @@ import random
 import numpy as np
 import math
 
-# asks user to set number of layers and neurons and outputs (9,9,1)
-# randomizes weights and biases
-# x = 1 and b,o = 0
-# setting minibatch (row) that runs through each time and changes weights and biases based on accuracy
 
 class network():
 
@@ -59,16 +55,15 @@ class network():
         # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
         # self.w = [np.random.rand(y, x)
         #       for x, y in zip(layerSizes[:-1], layerSizes[1:])])
-        
-        
-    def runNetwork(self, learningRate, testData = None):
+
+    def runNetwork(self, learningRate, testData=None):
         """This part of the program will 
         create the miniBatch from the epoch
         run the gradient descent on that         
         repeat for remaining epoch
         switch to next epoch
         End program when test data runs out"""
-        
+
         with open(
                 r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv",
                 newline=''
@@ -80,11 +75,11 @@ class network():
                 # print(expOutput)
                 tOutput = tuple(minibatchSplit[9])
                 self.updateWB(minibatch, learningRate, activations, tOutput)
-                
+
             """Still working on how to end an epoch/exit out of program"""
-    
+
     def makeMinibatchesList():
-    	minibatches = []
+        minibatches = []
         for minibatch in dataFile:  # each row begins as string
             minibatchSplit = minibatch.strip().split(",")
             minibatchInputs = minibatchSplit[0:9]  # end is exclusive
@@ -100,14 +95,13 @@ class network():
             minibatches.append(minibatch)
         return minibatches, minibatchInputs
 
-    
     def feedforward(self, inputs):
         """Return the output of the network if the inList of inputs is received."""
         neuronOuts = []
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
             activation = self.sigmoid((np.dot(wArray, inputs)+bArray))
             for output in rawOut:
-            		neuronOuts.append(activation[output])
+                neuronOuts.append(activation[output])
             inputs = activation
             # 1st iteration returns an array of 9 single element lists
             # break
@@ -133,33 +127,38 @@ class network():
         activation = 1/(1+(math.e**((-1)*dotProdSum)))
         return activation
 
-    
     def updateWB(self, inputs, learningRate, activations, tOutput):
         """Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate"""
-    	
+
         nablaW = np.zeros(w[0].shape)
         print(nablaW)
         nablaB = np.zeros(b[0].shape)
         print(nablaB)
 
         for [inputs, tOutput] in minibatch:
-            deltaNablaB, deltaNablaW = self.backprop(inputs, tOutput, activations, layerSizes)
+            deltaNablaB, deltaNablaW = self.backprop(
+                inputs, tOutput, activations, layerSizes)
 
-            nablaW = (nablaW + deltaNablaW for nablaW, deltaNablaW in zip(nablaW, deltaNablaW))
+            nablaW = (nablaW + deltaNablaW for nablaW,
+                      deltaNablaW in zip(nablaW, deltaNablaW))
 
-            nablaB = (nablaB + deltaNablaB for nablaB, deltaNablaB in zip(nablaB, deltaNablaB))
+            nablaB = (nablaB + deltaNablaB for nablaB,
+                      deltaNablaB in zip(nablaB, deltaNablaB))
 
-            self.w = (w - (learningRate/len(minibatch))*nablaW for w, nablaW in zip(self.w, nablaW))
+            self.w = (w - (learningRate/len(minibatch)) *
+                      nablaW for w, nablaW in zip(self.w, nablaW))
 
-            self.b = (b - (learningRate/len(minibatch))*nablaB for b, nablaB in zip(self.b, nablaB))
-    
+            self.b = (b - (learningRate/len(minibatch)) *
+                      nablaB for b, nablaB in zip(self.b, nablaB))
+
     def backprop(self, inputs, tOutput, activations, layerSizes):
         """
         Feedforward section of the network. Calculates the activation for each neuron of the network and 
         """
-        
+
         numLayers = self.layerSizes
-        errorL = self.costDerivative(neuronOutputs, tOutput) * self.sigmoidPrime(z[numLayers])
+        errorL = self.costDerivative(
+            neuronOutputs, tOutput) * self.sigmoidPrime(z[numLayers])
 
         deltaNablaB = errorL
         deltaNablaW = np.dot(errorL, activations[numLayers - 1].transpose())
@@ -172,13 +171,13 @@ class network():
             nablaW = np.dot(errorL, activations[-l-1].transpose())
 
         return deltaNablaB, deltaNablaW
-      
+
     def sigmoidPrime(self, s):
-      """
-      Function for the derivative of the activation function. Used to find the error of each neuron
-      """
-      sp = (self.sigmoid(s) - self.sigmoid(s)**2)
-      return sp
+        """
+        Function for the derivative of the activation function. Used to find the error of each neuron
+        """
+        sp = (self.sigmoid(s) - self.sigmoid(s)**2)
+        return sp
 
     def costDerivative(self, expOutput, tOutput):
         """
@@ -186,14 +185,15 @@ class network():
         """
         return (expOutput - tOutput)
 
+
 def main():
     # inputNuerons = int(input("How many inputs do you have? \n"))
     inputNuerons = 9  # debugging
     # outputNuerons = int(input("How many outputs do you want? \n"))
     outputNuerons = 1  # debugging
     neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
-    #learningRate = float(input("What's the learning rate \n")) 
-    learningRate = 0.01 #debugging
+    #learningRate = float(input("What's the learning rate \n"))
+    learningRate = 0.01  # debugging
     # not sure how to call init() in network class
     network1 = network(neuronsPerLayer, learningRate)
     network1.runNetwork()
