@@ -2,6 +2,9 @@ import os
 import random
 import numpy as np
 import math
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import matplotlib.patches as mpatches
 
 class network():
 
@@ -99,13 +102,15 @@ class network():
                   
                 groupsOf = 50
                 if minibatchNum % groupsOf == 0:
-                    percentCorrectStr = str(
+                    percentsCorrect = float(
                         round((numCorrect/groupsOf)*100)
-                    ) + str(" %")
-                    accuracyRates.append(percentCorrectStr)
+                    )
+                    accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
             print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
+
+            self.graphAccuracy(accuracyRates)
 
     def makeMinibatchesList(self, dataFile):
         minibatches = []
@@ -220,6 +225,39 @@ class network():
         y = np.array(tOut, dtype='float64')
         costPrime = np.subtract(networkOut, y)
         return costPrime
+
+    def graphAccuracy(data):
+
+        #define x and y values
+        # #x is numbers between 0 and 958, with 958 of them
+        # x = np.linspace(0,957,958)
+        # #y is previous list, all numbers between 0 and 1
+        y1 = data
+        fig, ax = plt.subplots()
+        xdata, ydata1 = [], []
+        xdata, ydata2 = [], []
+        ln, = plt.plot([], [], 'r-', animated=True)
+        self.garphInit()
+        ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
+                            init_func=init, blit=True)
+        plt.show()
+        #NEED TO SAFE GIF AS FILE
+
+    def garphInit():
+        redPatch = mpatches.Patch(color='red', label='Test Run 1')
+        plt.legend(handles=[redPatch], loc="upper right")
+        plt.xlabel("Iteration")
+        plt.ylabel("Percentage Correct")
+        plt.title("Percentage Correct Over Time")
+        plt.axis([0,1000,0,100])
+        return ln,
+
+    def update(frame):
+        xdata.append(frame)
+        ydata1.append(y1[int(frame)])
+        ydata2.append(y2[int(frame)])
+        ln.set_data(xdata, ydata1)
+        return ln,
 
 
 def main():
