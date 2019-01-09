@@ -81,7 +81,7 @@ y3 = listPercentage3
 fig, ax = plt.subplots()
 xdata, ydata1 = [], []
 xdata, ydata2 = [], []
-ln, = plt.plot([], [], 'r-', animated=True)
+graphLine, = plt.plot([], [], 'r-', animated=True)
 
 ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
                               init_func=init, blit=True)
