@@ -62,7 +62,7 @@ y3 = listPercentage3
 fig, ax = plt.subplots()
 xdata, ydata1 = [], []
 xdata, ydata2 = [], []
-ln, = plt.plot([], [], 'r-', animated=True)
+graphLine, = plt.plot([], [], 'r-', animated=True)
 
 def init():
     redPatch = mpatches.Patch(color='red', label='Test Run 1')
@@ -71,14 +71,14 @@ def init():
     plt.ylabel("Percentage Correct")
     plt.title("Percentage Correct Over Time")
     plt.axis([0,1000,0,100])
-    return ln,
+    return graphLine,
 
 def update(frame):
     xdata.append(frame)
     ydata1.append(y1[int(frame)])
     ydata2.append(y2[int(frame)])
-    ln.set_data(xdata, ydata1)
-    return ln,
+    graphLine.set_data(xdata, ydata1)
+    return graphLine,
 
 ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
                     init_func=init, blit=True)
