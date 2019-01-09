@@ -83,25 +83,6 @@ xdata, ydata1 = [], []
 xdata, ydata2 = [], []
 graphLine, = plt.plot([], [], 'r-', animated=True)
 
-<<<<<<< HEAD
-def init():
-    redPatch = mpatches.Patch(color='red', label='Test Run 1')
-    plt.legend(handles=[redPatch], loc="upper right")
-    plt.xlabel("Iteration")
-    plt.ylabel("Percentage Correct")
-    plt.title("Percentage Correct Over Time")
-    plt.axis([0,1000,0,100])
-    return graphLine,
-
-def update(frame):
-    xdata.append(frame)
-    ydata1.append(y1[int(frame)])
-    ydata2.append(y2[int(frame)])
-    graphLine.set_data(xdata, ydata1)
-    return graph,
-
-=======
->>>>>>> 255263b1f47fd1ae08b4666b5bec36a2f978c8a2
 ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
                               init_func=init, blit=True)
 plt.show()

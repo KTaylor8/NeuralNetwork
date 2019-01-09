@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 
+
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -88,7 +89,7 @@ class network():
                 expOut = self.feedforward(inputs)
                 # print(expOut) # debug
                 self.updateWB(expOut, inputs)
-                
+
                 # evaluate efficiency:
                 expOut = round(expOut)
                 resultList = []
@@ -99,7 +100,7 @@ class network():
                 else:
                   result = 'Incorrect'
                   resultList.append(result)
-                  
+
                 groupsOf = 50
                 if minibatchNum % groupsOf == 0:
                     percentsCorrect = float(
@@ -108,8 +109,8 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}") 
-            return accuracyRates, minibatchNum
+            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
+            return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
         minibatches = []
@@ -176,29 +177,29 @@ class network():
         Uses feedforward of network to calculate error for output layer, uses that to backpropagate error to other layers, and finally find the change in weights and biases based on the errors
         """
         nablaW = [np.zeros(layer.shape) for layer in self.w]
-        #print(nablaW)
+        # print(nablaW)
         nablaB = [np.zeros(layer.shape) for layer in self.b]
-        #print(nablaB)
+        # print(nablaB)
         activation = inputs
         activations = [inputs]
         weightedSumList = []
-        #feedforward
+        # feedforward
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
             weightedSum = np.dot(wArray, inputs)+bArray
             weightedSumList.append(weightedSum)
-            #print(weightedSumList)
+            # print(weightedSumList)
             activation = self.sigmoid(weightedSum)
             activations.append(activation)
-        		#print(activations)
-            
+        		# print(activations)
+
         # error and output change calculations
         error = self.costDerivative(
                 activations[-1], expOut) * self.sigmoidPrime(weightedSumList[-1])
         nablaB[-1] = error
         nablaW[-1] = np.dot(error, activations[-2].transpose())
 
-        #backpropagate error using output error
-        #find change in weights and biases for entire network
+        # backpropagate error using output error
+        # find change in weights and biases for entire network
         for L in range(2, len(self.layerSizes)):
             weightedSum = weightedSumList[-L]
             sp = self.sigmoidPrime(weightedSum)
@@ -225,6 +226,7 @@ class network():
         costPrime = np.subtract(networkOut, y)
         return costPrime
 
+
 def main():
     # inputNuerons = int(input("How many inputs do you have? \n"))
     inputNuerons = 9  # debugging
@@ -234,45 +236,51 @@ def main():
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
     network1 = network(neuronsPerLayer, learningRate)
-    accuracyData, numMinibatches = network1.runNetwork(learningRate)
-    return accuracyData, numMinibatches
+    return network1.runNetwork(learningRate)
 
 
 def graphInit():
-    redPatch = mpatches.Patch(color='red', label='Test Run 1')
+    redPatch = mpatches.Patch(color='red', label='Network')
     plt.legend(handles=[redPatch], loc="upper right")
     plt.xlabel("Iterations")
     plt.ylabel("Percentage Correct")
     plt.title("Percentage Correct Over Time")
-    plt.axis([0, 100, 0, 100]) #([x start, x end, y start, y end])
+    plt.axis([0, numIterations, 0, 100])  # ([x start, x end, y start, y end])
     return graphLine,
 
 
 def graphUpdate(frame):
+    # frames are for some reason starting at 1 and counting up by 2
     xdata.append(frame)
     ydata.append(percentagesCorrect[int(frame)])
+    # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
     graphLine.set_data(xdata, ydata)
     return graphLine,
-    
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    percentagesCorrect, numIterations = main()
+    percentagesCorrect = main()
+    numIterations = len(percentagesCorrect)
 
     plt.switch_backend('TkAgg')
 
     fig, ax = plt.subplots()
-    xdata, ydata = [], []
     graphLine, = plt.plot([], [], 'r-', animated=True)
+    # !!!!! need to set correct x-axis ticks
+    xdata, ydata = [], []
 
     ani = animation.FuncAnimation(fig,
                                   graphUpdate,
                                   frames=np.linspace(
-                                      1, (numIterations-1),
-                                      (numIterations-1)/2
-                                      ),
-                                  init_func=graphInit,
-                                  blit=True)
+                                    1,
+                                    numIterations,
+                                    num=numIterations
+                                    ),
+                                    init_func=graphInit,
+                                    blit=True
+    )
     plt.show()
     print("graph shown")
-    #NEED TO SAFE GIF AS FILE
+    # NEED TO SAFE GIF AS FILE
