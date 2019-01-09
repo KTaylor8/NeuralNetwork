@@ -2,6 +2,9 @@ import os
 import random
 import numpy as np
 import math
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import matplotlib.patches as mpatches
 
 class network():
 
@@ -247,17 +250,16 @@ def graphInit():
 
 def graphUpdate(frame):
     xdata.append(frame)
-    ydata.append(yPercentageList[int(frame)])
+    ydata.append(percentagesCorrect[int(frame)])
     graphLine.set_data(xdata, ydata)
     return graphLine,
     
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    data, numIterations = main()
+    percentagesCorrect, numIterations = main()
 
     plt.switch_backend('TkAgg')
-    yPercentageList = data
 
     fig, ax = plt.subplots()
     xdata, ydata = [], []
