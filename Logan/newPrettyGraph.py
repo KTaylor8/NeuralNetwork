@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.patches as mpatches
 import numpy as np
 import csv
+
+plt.switch_backend('TkAgg')
 
 #define empty lists to add numbers from csv to
 listExperimentals1 = []
@@ -57,11 +60,13 @@ y2 = listPercentage2
 y3 = listPercentage3
 
 fig, ax = plt.subplots()
-xdata, ydata = [], []
+xdata, ydata1 = [], []
+xdata, ydata2 = [], []
 ln, = plt.plot([], [], 'r-', animated=True)
 
 def init():
-    plt.legend(loc="upper right")
+    redPatch = mpatches.Patch(color='red', label='Test Run 1')
+    plt.legend(handles=[redPatch], loc="upper right")
     plt.xlabel("Iteration")
     plt.ylabel("Percentage Correct")
     plt.title("Percentage Correct Over Time")
@@ -70,8 +75,9 @@ def init():
 
 def update(frame):
     xdata.append(frame)
-    ydata.append(y1[int(frame)])
-    ln.set_data(xdata, ydata)
+    ydata1.append(y1[int(frame)])
+    ydata2.append(y2[int(frame)])
+    ln.set_data(xdata, ydata1)
     return ln,
 
 ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
