@@ -108,9 +108,8 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
-
-            self.graphAccuracy(accuracyRates)
+            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}") 
+            return accuracyRates, minibatchNum
 
     def makeMinibatchesList(self, dataFile):
         minibatches = []
@@ -226,40 +225,6 @@ class network():
         costPrime = np.subtract(networkOut, y)
         return costPrime
 
-    def graphAccuracy(data):
-
-        #define x and y values
-        # #x is numbers between 0 and 958, with 958 of them
-        # x = np.linspace(0,957,958)
-        # #y is previous list, all numbers between 0 and 1
-        y1 = data
-        fig, ax = plt.subplots()
-        xdata, ydata1 = [], []
-        xdata, ydata2 = [], []
-        ln, = plt.plot([], [], 'r-', animated=True)
-        self.garphInit()
-        ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
-                            init_func=init, blit=True)
-        plt.show()
-        #NEED TO SAFE GIF AS FILE
-
-    def garphInit():
-        redPatch = mpatches.Patch(color='red', label='Test Run 1')
-        plt.legend(handles=[redPatch], loc="upper right")
-        plt.xlabel("Iteration")
-        plt.ylabel("Percentage Correct")
-        plt.title("Percentage Correct Over Time")
-        plt.axis([0,1000,0,100])
-        return ln,
-
-    def update(frame):
-        xdata.append(frame)
-        ydata1.append(y1[int(frame)])
-        ydata2.append(y2[int(frame)])
-        ln.set_data(xdata, ydata1)
-        return ln,
-
-
 def main():
     # inputNuerons = int(input("How many inputs do you have? \n"))
     inputNuerons = 9  # debugging
@@ -269,10 +234,46 @@ def main():
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
     network1 = network(neuronsPerLayer, learningRate)
-    network1.runNetwork(learningRate)
+    accuracyData, numMinibatches = network1.runNetwork(learningRate)
+    return accuracyData, numMinibatches
 
 
-if __name__ == main():
+def graphInit():
+    redPatch = mpatches.Patch(color='red', label='Test Run 1')
+    plt.legend(handles=[redPatch], loc="upper right")
+    plt.xlabel("Iterations")
+    plt.ylabel("Percentage Correct")
+    plt.title("Percentage Correct Over Time")
+    plt.axis([0, 100, 0, 100]) #([x start, x end, y start, y end])
+    return graphLine,
+
+
+def graphUpdate(frame):
+    xdata.append(frame)
+    ydata.append(yPercentageList[int(frame)])
+    graphLine.set_data(xdata, ydata)
+    return graphLine,
+    
+if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    main()
+    data, numIterations = main()
+
+    plt.switch_backend('TkAgg')
+    yPercentageList = data
+
+    fig, ax = plt.subplots()
+    xdata, ydata = [], []
+    graphLine, = plt.plot([], [], 'r-', animated=True)
+
+    ani = animation.FuncAnimation(fig,
+                                  graphUpdate,
+                                  frames=np.linspace(
+                                      1, (numIterations-1),
+                                      (numIterations-1)/2
+                                      ),
+                                  init_func=graphInit,
+                                  blit=True)
+    plt.show()
+    print("graph shown")
+    #NEED TO SAFE GIF AS FILE
