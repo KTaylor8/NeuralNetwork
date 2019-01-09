@@ -78,7 +78,7 @@ def update(frame):
     ydata1.append(y1[int(frame)])
     ydata2.append(y2[int(frame)])
     graphLine.set_data(xdata, ydata1)
-    return graphLine,
+    return graph,
 
 ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
                     init_func=init, blit=True)
