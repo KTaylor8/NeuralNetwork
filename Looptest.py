@@ -2,7 +2,7 @@ import os
 import random
 import numpy as np
 import math
-import matplotlib as plt
+
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -63,51 +63,47 @@ class network():
         End program when test data runs out"""
 
         with open(
-                r"ticTacToeData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", "r", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
             minibatchNum = 1
             accuracyRates = []
             numCorrect = 0
+
+
             for minibatch in minibatches:
-                tOut = minibatch[9]
-                if tOut == 'positive':
-                    tOut = 1.0
-                elif tOut == 'negative':
-                    tOut = 0.0
-                # print(tOut)  # debug
+                tOutput = minibatch[9]
+                if tOutput == 'positive':
+                    tOutput = 1.0
+                elif tOutput == 'negative':
+                    tOutput = 0.0  # make this into floats
+                # print(tOutput)  # debug
                 minibatchInputs = minibatch[0:9]  # end is exclusive
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
                     (self.layerSizes[0], 1)
                 )  # (rows, columns)
-                expOut = self.feedforward(inputs)
-                # print(expOut) # debug
-                self.updateWB(expOut, inputs)
-                
+                expOutput = self.feedforward(inputs)
+                # print(expOutput)
+                self.updateWB(expOutput, inputs)
                 # evaluate efficiency:
-                expOut = round(expOut)
-                resultList = []
-                if expOut == tOut:
+                expOutput = round(expOutput)
+
+                if expOutput == tOutput:
                     numCorrect = numCorrect + 1
-                    result = 'Correct'
-                    resultList.append(result)
-                else:
-                  result = 'Incorrect'
-                  resultList.append(result)
-                  
-                groupsOf = 50
+                groupsOf = 1000
                 if minibatchNum % groupsOf == 0:
-                    percentsCorrect = float(
+                    percentCorrectStr = str(
                         round((numCorrect/groupsOf)*100)
-                    )
-                    accuracyRates.append(percentsCorrect)
+                    ) + str(" %")
+                    accuracyRates.append(percentCorrectStr)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
 
-            self.graphAccuracy(accuracyRates)
+                #this is where I have the code loop through the epoch again
+
+            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
 
     def makeMinibatchesList(self, dataFile):
         minibatches = []
@@ -135,13 +131,19 @@ class network():
         #     expOut = "negative"
 
         expOut = activation[0][0]
+        # expOut = round(activation[0][0])  # threshold based on rounding
+        # if expOut == 1.0:
+        #     expOut = "positive"
+        # elif expOut == 0.0:
+        #     expOut = "negative"
+        # print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
         return expOut
 
     def sigmoid(self, dotProdSum):
         """
         The sigmoid activation function put the inputs, weights, and biases into a function that helps us determine if the neuron fires or not.
         """
-        activation = 1/(1+np.exp(-dotProdSum))
+        activation = 1/(1+(math.e**((-1)*dotProdSum)))
         return activation
 
     def updateWB(self, expOut, inputs):
@@ -174,9 +176,9 @@ class network():
         Uses feedforward of network to calculate error for output layer, uses that to backpropagate error to other layers, and finally find the change in weights and biases based on the errors
         """
         nablaW = [np.zeros(layer.shape) for layer in self.w]
-        #print(nablaW)
+        # print(nablaW)
         nablaB = [np.zeros(layer.shape) for layer in self.b]
-        #print(nablaB)
+        # print(nablaB)
         activation = inputs
         activations = [inputs]
         weightedSumList = []
@@ -214,57 +216,26 @@ class network():
         """
         return self.sigmoid(s)*(1-self.sigmoid(s))
 
-    def costDerivative(self, expOut, tOut):
+    def costDerivative(self, expOut, tOutput):
         """
         Function for the derivative of the cost function. Used to find the error of each neuron
         """
         networkOut = np.array(expOut, dtype='float64')
-        y = np.array(tOut, dtype='float64')
-        costPrime = np.subtract(networkOut, y)
+        y = np.array(tOutput, dtype='float64')
+        costPrime = np.subtract(y, networkOut)
         return costPrime
-
-    def graphAccuracy(data):
-
-        #define x and y values
-        # #x is numbers between 0 and 958, with 958 of them
-        # x = np.linspace(0,957,958)
-        # #y is previous list, all numbers between 0 and 1
-        y1 = data
-        fig, ax = plt.subplots()
-        xdata, ydata1 = [], []
-        xdata, ydata2 = [], []
-        ln, = plt.plot([], [], 'r-', animated=True)
-        self.garphInit()
-        ani = animation.FuncAnimation(fig, update, frames=np.linspace(1, 958, 479),
-                            init_func=init, blit=True)
-        plt.show()
-        #NEED TO SAFE GIF AS FILE
-
-    def garphInit():
-        redPatch = mpatches.Patch(color='red', label='Test Run 1')
-        plt.legend(handles=[redPatch], loc="upper right")
-        plt.xlabel("Iteration")
-        plt.ylabel("Percentage Correct")
-        plt.title("Percentage Correct Over Time")
-        plt.axis([0,1000,0,100])
-        return ln,
-
-    def update(frame):
-        xdata.append(frame)
-        ydata1.append(y1[int(frame)])
-        ydata2.append(y2[int(frame)])
-        ln.set_data(xdata, ydata1)
-        return ln,
 
 
 def main():
     # inputNuerons = int(input("How many inputs do you have? \n"))
     inputNuerons = 9  # debugging
+    hiddenNuerons = 5
     # outputNuerons = int(input("How many outputs do you want? \n"))
     outputNuerons = 1  # debugging
-    neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
+    neuronsPerLayer = [inputNuerons, hiddenNuerons, outputNuerons]
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
+    # not sure how to call init() in network class
     network1 = network(neuronsPerLayer, learningRate)
     network1.runNetwork(learningRate)
 
