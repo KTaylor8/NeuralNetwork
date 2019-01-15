@@ -68,7 +68,7 @@ class network():
         End program when test data runs out"""
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
