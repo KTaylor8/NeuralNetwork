@@ -271,7 +271,6 @@ if __name__ == "__main__":
     for i in range(1, numIterations):
         ticksList.append(i)
     ax.set_xticks(ticksList)
-    # !!!!! need to set correct x-axis ticks
 
     xdata, ydata = [], []
     ani = animation.FuncAnimation(fig,
