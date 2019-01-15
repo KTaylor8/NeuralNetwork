@@ -2,9 +2,6 @@ import os
 import random
 import numpy as np
 import math
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import matplotlib.patches as mpatches
 
 class network():
 
@@ -52,8 +49,6 @@ class network():
 
         self.b = allBList
 
-        # print(f"weights: {self.w}")
-        print(f"biases: {self.b}")
         # alternate generation code limited to range [0, 1):
         # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
         # self.w = [np.random.rand(y, x)
@@ -68,50 +63,47 @@ class network():
         End program when test data runs out"""
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", "r", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
             minibatchNum = 1
             accuracyRates = []
             numCorrect = 0
+
+
             for minibatch in minibatches:
-                tOut = minibatch[9]
-                if tOut == 'positive':
-                    tOut = 1.0
-                elif tOut == 'negative':
-                    tOut = 0.0
-                # print(tOut)  # debug
+                tOutput = minibatch[9]
+                if tOutput == 'positive':
+                    tOutput = 1.0
+                elif tOutput == 'negative':
+                    tOutput = 0.0  # make this into floats
+                # print(tOutput)  # debug
                 minibatchInputs = minibatch[0:9]  # end is exclusive
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
                     (self.layerSizes[0], 1)
                 )  # (rows, columns)
-                expOut = self.feedforward(inputs)
-                # print(expOut) # debug
-                self.updateWB(expOut, inputs)
-
+                expOutput = self.feedforward(inputs)
+                # print(expOutput)
+                self.updateWB(expOutput, inputs)
                 # evaluate efficiency:
-                expOut = round(expOut)
-                resultList = []
-                if expOut == tOut:
-                    numCorrect = numCorrect + 1
-                    result = 'Correct'
-                    resultList.append(result)
-                else:
-                  result = 'Incorrect'
-                  resultList.append(result)
+                expOutput = round(expOutput)
 
-                groupsOf = 50
+                if expOutput == tOutput:
+                    numCorrect = numCorrect + 1
+                groupsOf = 1000
                 if minibatchNum % groupsOf == 0:
-                    percentsCorrect = float(
+                    percentCorrectStr = str(
                         round((numCorrect/groupsOf)*100)
-                    )
-                    accuracyRates.append(percentsCorrect)
+                    ) + str(" %")
+                    accuracyRates.append(percentCorrectStr)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
+
+                #this is where I have the code loop through the epoch again
+
             print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
-            return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
         minibatches = []
@@ -139,13 +131,19 @@ class network():
         #     expOut = "negative"
 
         expOut = activation[0][0]
+        # expOut = round(activation[0][0])  # threshold based on rounding
+        # if expOut == 1.0:
+        #     expOut = "positive"
+        # elif expOut == 0.0:
+        #     expOut = "negative"
+        # print(f'rawOut: {rawOut[0][0]}\tsign: {expOut}')
         return expOut
 
     def sigmoid(self, dotProdSum):
         """
         The sigmoid activation function put the inputs, weights, and biases into a function that helps us determine if the neuron fires or not.
         """
-        activation = 1/(1+np.exp(-dotProdSum))
+        activation = 1/(1+(math.e**((-1)*dotProdSum)))
         return activation
 
     def updateWB(self, expOut, inputs):
@@ -184,23 +182,23 @@ class network():
         activation = inputs
         activations = [inputs]
         weightedSumList = []
-        # feedforward
+        #feedforward
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
             weightedSum = np.dot(wArray, inputs)+bArray
             weightedSumList.append(weightedSum)
-            # print(weightedSumList)
+            #print(weightedSumList)
             activation = self.sigmoid(weightedSum)
             activations.append(activation)
-        		# print(activations)
-
+        		#print(activations)
+            
         # error and output change calculations
         error = self.costDerivative(
                 activations[-1], expOut) * self.sigmoidPrime(weightedSumList[-1])
         nablaB[-1] = error
         nablaW[-1] = np.dot(error, activations[-2].transpose())
 
-        # backpropagate error using output error
-        # find change in weights and biases for entire network
+        #backpropagate error using output error
+        #find change in weights and biases for entire network
         for L in range(2, len(self.layerSizes)):
             weightedSum = weightedSumList[-L]
             sp = self.sigmoidPrime(weightedSum)
@@ -218,13 +216,13 @@ class network():
         """
         return self.sigmoid(s)*(1-self.sigmoid(s))
 
-    def costDerivative(self, expOut, tOut):
+    def costDerivative(self, expOut, tOutput):
         """
         Function for the derivative of the cost function. Used to find the error of each neuron
         """
         networkOut = np.array(expOut, dtype='float64')
-        y = np.array(tOut, dtype='float64')
-        costPrime = np.subtract(networkOut, y)
+        y = np.array(tOutput, dtype='float64')
+        costPrime = np.subtract(y, networkOut)
         return costPrime
 
 
@@ -236,51 +234,12 @@ def main():
     neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
+    # not sure how to call init() in network class
     network1 = network(neuronsPerLayer, learningRate)
-    return network1.runNetwork(learningRate)
+    network1.runNetwork(learningRate)
 
 
-def graphUpdate(frame):
-    # frames are for some reason starting at 1 and counting up by 2
-    xdata.append(frame)
-    ydata.append(percentagesCorrect[int(frame)])
-    # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
-    graphLine.set_data(xdata, ydata)
-    return graphLine,
-
-
-if __name__ == "__main__":
-
-    percentagesCorrect = main()
-    numIterations = len(percentagesCorrect)
-
-    plt.switch_backend('TkAgg')
-
-    #initialize graph:
-    fig, ax = plt.subplots()
-    graphLine, = plt.plot([], [], 'r-', animated=True)
-    redPatch = mpatches.Patch(color='red',label='Network')
-    plt.legend(handles=[redPatch], loc="upper right")
-    plt.xlabel("Iterations")
-    plt.ylabel("Percentage Correct")
-    plt.title("Percentage Correct Over Time")
-    plt.axis([1, numIterations, 0, 100])  # ([x start, x end, y start, y end])
-
-    ticksList = []
-    for i in range(1, numIterations):
-        ticksList.append(i)
-    ax.set_xticks(ticksList)
-
-    xdata, ydata = [], []
-    ani = animation.FuncAnimation(fig,
-                                  graphUpdate,
-                                  frames=np.linspace(
-                                    1,
-                                    numIterations,
-                                    num=numIterations
-                                    ),
-                                    blit=True
-    )
-    plt.show()
-    print("graph shown")
-    # NEED TO SAVE GIF AS FILE
+if __name__ == main():
+    import doctest
+    doctest.testmod()
+    main()

@@ -5,6 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
+import time
 
 class network():
 
@@ -52,8 +53,6 @@ class network():
 
         self.b = allBList
 
-        # print(f"weights: {self.w}")
-        print(f"biases: {self.b}")
         # alternate generation code limited to range [0, 1):
         # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
         # self.w = [np.random.rand(y, x)
@@ -68,7 +67,7 @@ class network():
         End program when test data runs out"""
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -170,8 +169,10 @@ class network():
         self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
 
+
         self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaB for b, nablaB in zip(self.b, nablaB)]
+
 
     def backprop(self, expOut, inputs):
         """
@@ -239,48 +240,7 @@ def main():
     network1 = network(neuronsPerLayer, learningRate)
     return network1.runNetwork(learningRate)
 
-
-def graphUpdate(frame):
-    # frames are for some reason starting at 1 and counting up by 2
-    xdata.append(frame)
-    ydata.append(percentagesCorrect[int(frame)])
-    # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
-    graphLine.set_data(xdata, ydata)
-    return graphLine,
-
-
 if __name__ == "__main__":
-
-    percentagesCorrect = main()
-    numIterations = len(percentagesCorrect)
-
-    plt.switch_backend('TkAgg')
-
-    #initialize graph:
-    fig, ax = plt.subplots()
-    graphLine, = plt.plot([], [], 'r-', animated=True)
-    redPatch = mpatches.Patch(color='red',label='Network')
-    plt.legend(handles=[redPatch], loc="upper right")
-    plt.xlabel("Iterations")
-    plt.ylabel("Percentage Correct")
-    plt.title("Percentage Correct Over Time")
-    plt.axis([1, numIterations, 0, 100])  # ([x start, x end, y start, y end])
-
-    ticksList = []
-    for i in range(1, numIterations):
-        ticksList.append(i)
-    ax.set_xticks(ticksList)
-
-    xdata, ydata = [], []
-    ani = animation.FuncAnimation(fig,
-                                  graphUpdate,
-                                  frames=np.linspace(
-                                    1,
-                                    numIterations,
-                                    num=numIterations
-                                    ),
-                                    blit=True
-    )
-    plt.show()
-    print("graph shown")
-    # NEED TO SAVE GIF AS FILE
+    import doctest
+    doctest.testmod()
+  
