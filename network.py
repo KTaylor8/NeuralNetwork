@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 
-
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -53,6 +52,8 @@ class network():
 
         self.b = allBList
 
+        # print(f"weights: {self.w}")
+        print(f"biases: {self.b}")
         # alternate generation code limited to range [0, 1):
         # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
         # self.w = [np.random.rand(y, x)
@@ -239,16 +240,6 @@ def main():
     return network1.runNetwork(learningRate)
 
 
-def graphInit():
-    redPatch = mpatches.Patch(color='red', label='Network')
-    plt.legend(handles=[redPatch], loc="upper right")
-    plt.xlabel("Iterations")
-    plt.ylabel("Percentage Correct")
-    plt.title("Percentage Correct Over Time")
-    plt.axis([0, numIterations, 0, 100])  # ([x start, x end, y start, y end])
-    return graphLine,
-
-
 def graphUpdate(frame):
     # frames are for some reason starting at 1 and counting up by 2
     xdata.append(frame)
@@ -265,11 +256,23 @@ if __name__ == "__main__":
 
     plt.switch_backend('TkAgg')
 
+    #initialize graph:
     fig, ax = plt.subplots()
     graphLine, = plt.plot([], [], 'r-', animated=True)
-    # !!!!! need to set correct x-axis ticks
-    xdata, ydata = [], []
+    redPatch = mpatches.Patch(color='red',label='Network')
+    plt.legend(handles=[redPatch], loc="upper right")
+    plt.xlabel("Iterations")
+    plt.ylabel("Percentage Correct")
+    plt.title("Percentage Correct Over Time")
+    plt.axis([1, numIterations, 0, 100])  # ([x start, x end, y start, y end])
 
+    ticksList = []
+    for i in range(1, numIterations):
+        ticksList.append(i)
+    ax.set_xticks(ticksList)
+    # !!!!! need to set correct x-axis ticks
+
+    xdata, ydata = [], []
     ani = animation.FuncAnimation(fig,
                                   graphUpdate,
                                   frames=np.linspace(
@@ -277,9 +280,8 @@ if __name__ == "__main__":
                                     numIterations,
                                     num=numIterations
                                     ),
-                                    init_func=graphInit,
                                     blit=True
     )
     plt.show()
     print("graph shown")
-    # NEED TO SAFE GIF AS FILE
+    # NEED TO SAVE GIF AS FILE
