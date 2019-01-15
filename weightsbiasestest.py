@@ -5,7 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
-
+import time
 
 class network():
 
@@ -67,7 +67,7 @@ class network():
         End program when test data runs out"""
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -169,8 +169,10 @@ class network():
         self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
 
+
         self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaB for b, nablaB in zip(self.b, nablaB)]
+
 
     def backprop(self, expOut, inputs):
         """
@@ -238,48 +240,7 @@ def main():
     network1 = network(neuronsPerLayer, learningRate)
     return network1.runNetwork(learningRate)
 
-
-def graphInit():
-    redPatch = mpatches.Patch(color='red', label='Network')
-    plt.legend(handles=[redPatch], loc="upper right")
-    plt.xlabel("Iterations")
-    plt.ylabel("Percentage Correct")
-    plt.title("Percentage Correct Over Time")
-    plt.axis([0, numIterations, 0, 100])  # ([x start, x end, y start, y end])
-    return graphLine,
-
-
-def graphUpdate(frame):
-    # frames are for some reason starting at 1 and counting up by 2
-    xdata.append(frame)
-    ydata.append(percentagesCorrect[int(frame)])
-    # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
-    graphLine.set_data(xdata, ydata)
-    return graphLine,
-
-
 if __name__ == "__main__":
-
-    percentagesCorrect = main()
-    numIterations = len(percentagesCorrect)
-
-    plt.switch_backend('TkAgg')
-
-    fig, ax = plt.subplots()
-    graphLine, = plt.plot([], [], 'r-', animated=True)
-    # !!!!! need to set correct x-axis ticks
-    xdata, ydata = [], []
-
-    ani = animation.FuncAnimation(fig,
-                                  graphUpdate,
-                                  frames=np.linspace(
-                                    1,
-                                    numIterations,
-                                    num=numIterations
-                                    ),
-                                    init_func=graphInit,
-                                    blit=True
-    )
-    plt.show()
-    print("graph shown")
-    # NEED TO SAFE GIF AS FILE
+    import doctest
+    doctest.testmod()
+  

@@ -229,10 +229,9 @@ class network():
 def main():
     # inputNuerons = int(input("How many inputs do you have? \n"))
     inputNuerons = 9  # debugging
-    hiddenNuerons = 5
     # outputNuerons = int(input("How many outputs do you want? \n"))
     outputNuerons = 1  # debugging
-    neuronsPerLayer = [inputNuerons, hiddenNuerons, outputNuerons]
+    neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
     # not sure how to call init() in network class
