@@ -52,15 +52,15 @@ class network():
 
         self.b = allBList
 
-    def runNetwork(self):
+    def runNetwork(self, learningRate, testData=None):
         """
-        This part of the program will prepare each minibatch's inputs to be fed through the network and serve as the base of the network to pass information between other functions in the network.
+        This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
         """
 
         with open(
                 r"ticTacToeData.csv", newline=''
         ) as dataFile:
-            # non-subscriptable objects aren't containers & don't have indices
+            # non-subscriptable objects aren't containers and don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
             minibatchNum = 1
             accuracyRates = []
@@ -70,8 +70,8 @@ class network():
                 if tOut == 'positive':
                     tOut = 1.0
                 elif tOut == 'negative':
-                    tOut == 0.0
-                minibatchInputs = minibatch[0:9]  # end is exclusive
+                    tOut = 0.0
+                minibatchInputs = minibatch[0:9] 
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
                     (self.layerSizes[0], 1)
@@ -79,10 +79,16 @@ class network():
                 expOut = self.feedforward(inputs)
                 self.updateWB(expOut, inputs)
 
-                # evaluate effectiveness of predictions:
+                # evaluate accuracy of predictions:
                 expOut = round(expOut)
+                resultList = []
                 if expOut == tOut:
                     numCorrect = numCorrect + 1
+                    result = 'Correct'
+                    resultList.append(result)
+                else:
+                  result = 'Incorrect'
+                  resultList.append(result)
 
                 groupsOf = 50
                 if minibatchNum % groupsOf == 0:
@@ -92,24 +98,27 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
+            print(f"Accuracy rates in groups of {groupsOf}: {accuracyRates}")
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
+        """
+        Convert csv file of characters to a list of lists of floats for each minibatch (line).
+        """
         minibatches = []
         for minibatch in dataFile:  # each row begins as string
             minibatchSplit = minibatch.strip().split(",")
             for i in range(len(minibatchSplit)-1):
                 if minibatchSplit[i] == "x":
                     minibatchSplit[i] = 1.0
-                else:  # o or b
+                else:  # if o or b
                     minibatchSplit[i] = 0.0
             minibatches.append(minibatchSplit)
         return minibatches
 
     def feedforward(self, inputs):
         """
-        Return the output of the network if the list of inputs is received.
+        Return the output of the network for an array of network inputs.
         """
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
             activation = self.sigmoid(np.dot(wArray, inputs)+bArray)
@@ -127,7 +136,7 @@ class network():
 
     def updateWB(self, expOut, inputs):
         """
-        Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate.
+        Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate
         """
 
         nablaW = [np.zeros(layer.shape) for layer in self.w]
@@ -217,7 +226,7 @@ def main():
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
     network1 = network(neuronsPerLayer, learningRate)
-    return network1.runNetwork()
+    return network1.runNetwork(learningRate)
 
 
 def graphUpdate(frame):
@@ -250,6 +259,7 @@ if __name__ == "__main__":
     for i in range(1, numIterations):
         ticksList.append(i)
     ax.set_xticks(ticksList)
+    # !!!!! need to set correct x-axis ticks
 
     xdata, ydata = [], []
     ani = animation.FuncAnimation(fig,
@@ -262,5 +272,3 @@ if __name__ == "__main__":
                                     blit=True
     )
     plt.show()
-    print("graph shown")
-    # NEED TO SAVE GIF AS FILE

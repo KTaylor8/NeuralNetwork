@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 
+
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -67,10 +68,6 @@ class network():
             numCorrect = 0
             for minibatch in minibatches:
                 tOut = minibatch[9]
-                if tOut == 'positive':
-                    tOut = 1.0
-                elif tOut == 'negative':
-                    tOut == 0.0
                 minibatchInputs = minibatch[0:9]  # end is exclusive
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
@@ -79,7 +76,7 @@ class network():
                 expOut = self.feedforward(inputs)
                 self.updateWB(expOut, inputs)
 
-                # evaluate effectiveness of predictions:
+                # evaluate accuracy of predictions:
                 expOut = round(expOut)
                 if expOut == tOut:
                     numCorrect = numCorrect + 1
@@ -92,10 +89,13 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in batches of {groupsOf}: {accuracyRates}")
+            print(f"Accuracy rates in groups of {groupsOf}: {accuracyRates}")
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
+        """
+        Convert csv file of characters to a list of lists of floats for each minibatch (line).
+        """
         minibatches = []
         for minibatch in dataFile:  # each row begins as string
             minibatchSplit = minibatch.strip().split(",")
@@ -104,12 +104,17 @@ class network():
                     minibatchSplit[i] = 1.0
                 else:  # o or b
                     minibatchSplit[i] = 0.0
+
+            if minibatchSplit[9] == 'positive':  # theoretical output
+                    minibatchSplit[9] = 1.0
+            elif minibatchSplit[9] == 'negative':
+                minibatchSplit[9] == 0.0
             minibatches.append(minibatchSplit)
         return minibatches
 
     def feedforward(self, inputs):
         """
-        Return the output of the network if the list of inputs is received.
+        Return the output of the network for an array of network inputs.
         """
         for bArray, wArray in zip(self.b, self.w):  # layers/arrays = 2
             activation = self.sigmoid(np.dot(wArray, inputs)+bArray)
@@ -236,7 +241,7 @@ if __name__ == "__main__":
 
     plt.switch_backend('TkAgg')
 
-    #initialize graph:
+    # initialize graph:
     fig, ax = plt.subplots()
     graphLine, = plt.plot([], [], 'r-', animated=True)
     redPatch = mpatches.Patch(color='red',label='Network')
