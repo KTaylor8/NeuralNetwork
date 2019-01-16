@@ -262,5 +262,3 @@ if __name__ == "__main__":
                                     blit=True
     )
     plt.show()
-    print("graph shown")
-    # NEED TO SAVE GIF AS FILE
