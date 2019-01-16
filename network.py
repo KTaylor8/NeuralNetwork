@@ -52,25 +52,15 @@ class network():
 
         self.b = allBList
 
-        # print(f"weights: {self.w}")
-        print(f"biases: {self.b}")
-        # alternate generation code limited to range [0, 1):
-        # self.b = [np.random.rand(y, 1) for y in layerSizes[1:]]
-        # self.w = [np.random.rand(y, x)
-        #       for x, y in zip(layerSizes[:-1], layerSizes[1:])])
-
-    def runNetwork(self, learningRate, testData=None):
-        """This part of the program will
-        create the miniBatch from the epoch
-        run the gradient descent on that
-        repeat for remaining epoch
-        switch to next epoch
-        End program when test data runs out"""
+    def runNetwork(self, learningRate):
+        """
+        This part of the program will prepare each minibatch's inputs to be fed through the network
+        """
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
-            # non-subscriptable objects aren't containers and don't have indices
+            # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
             minibatchNum = 1
             accuracyRates = []
@@ -81,26 +71,24 @@ class network():
                     tOut = 1.0
                 elif tOut == 'negative':
                     tOut = 0.0
-                # print(tOut)  # debug
                 minibatchInputs = minibatch[0:9]  # end is exclusive
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
                     (self.layerSizes[0], 1)
                 )  # (rows, columns)
                 expOut = self.feedforward(inputs)
-                # print(expOut) # debug
                 self.updateWB(expOut, inputs)
 
-                # evaluate efficiency:
+                # evaluate effectiveness of predictions:
                 expOut = round(expOut)
-                resultList = []
+                # resultList = []
                 if expOut == tOut:
                     numCorrect = numCorrect + 1
-                    result = 'Correct'
-                    resultList.append(result)
-                else:
-                  result = 'Incorrect'
-                  resultList.append(result)
+                #     result = 'Correct'
+                #     resultList.append(result)
+                # else:
+                #   result = 'Incorrect'
+                #   resultList.append(result)
 
                 groupsOf = 50
                 if minibatchNum % groupsOf == 0:
@@ -270,7 +258,6 @@ if __name__ == "__main__":
     for i in range(1, numIterations):
         ticksList.append(i)
     ax.set_xticks(ticksList)
-    # !!!!! need to set correct x-axis ticks
 
     xdata, ydata = [], []
     ani = animation.FuncAnimation(fig,
