@@ -52,7 +52,7 @@ class network():
 
         self.b = allBList
 
-    def runNetwork(self, learningRate, testData=None):
+    def runNetwork(self):
         """
         This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
         """
@@ -60,17 +60,13 @@ class network():
         with open(
                 r"ticTacToeData.csv", newline=''
         ) as dataFile:
-            # non-subscriptable objects aren't containers and don't have indices
+            # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
             minibatchNum = 1
             accuracyRates = []
             numCorrect = 0
             for minibatch in minibatches:
                 tOut = minibatch[9]
-                if tOut == 'positive':
-                    tOut = 1.0
-                elif tOut == 'negative':
-                    tOut = 0.0
                 minibatchInputs = minibatch[0:9] 
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
@@ -81,14 +77,8 @@ class network():
 
                 # evaluate accuracy of predictions:
                 expOut = round(expOut)
-                resultList = []
                 if expOut == tOut:
                     numCorrect = numCorrect + 1
-                    result = 'Correct'
-                    resultList.append(result)
-                else:
-                  result = 'Incorrect'
-                  resultList.append(result)
 
                 groupsOf = 50
                 if minibatchNum % groupsOf == 0:
@@ -98,7 +88,7 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates in groups of {groupsOf}: {accuracyRates}")
+            print(f"Accuracy rates: {accuracyRates}")
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
@@ -111,8 +101,13 @@ class network():
             for i in range(len(minibatchSplit)-1):
                 if minibatchSplit[i] == "x":
                     minibatchSplit[i] = 1.0
-                else:  # if o or b
+                else:  # o or b
                     minibatchSplit[i] = 0.0
+
+            if minibatchSplit[9] == 'positive':  # theoretical output
+                minibatchSplit[9] = 1.0
+            elif minibatchSplit[9] == 'negative':
+                minibatchSplit[9] = 0.0
             minibatches.append(minibatchSplit)
         return minibatches
 
@@ -226,7 +221,7 @@ def main():
     # learningRate = float(input("What's the learning rate \n"))
     learningRate = 1  # debugging
     network1 = network(neuronsPerLayer, learningRate)
-    return network1.runNetwork(learningRate)
+    return network1.runNetwork()
 
 
 def graphUpdate(frame):
@@ -259,7 +254,6 @@ if __name__ == "__main__":
     for i in range(1, numIterations):
         ticksList.append(i)
     ax.set_xticks(ticksList)
-    # !!!!! need to set correct x-axis ticks
 
     xdata, ydata = [], []
     ani = animation.FuncAnimation(fig,
