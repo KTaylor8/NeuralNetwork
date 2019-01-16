@@ -227,7 +227,10 @@ def main():
 def graphUpdate(frame):
     # frames are for some reason starting at 1 and counting up by 2
     xdata.append(frame)
-    ydata.append(percentagesCorrect[int(frame)])
+    try: 
+        ydata.append(percentagesCorrect[int(frame)])
+    except IndexError:
+        0 == 0 
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
     graphLine.set_data(xdata, ydata)
     return graphLine,
