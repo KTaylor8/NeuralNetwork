@@ -14,8 +14,7 @@ class network():
         """
         self.layerSizes = layerSizes
         self.learningRate = learningRate
-        # lists in which each element is an array for each layer, which each contain the connections/neurons for that layer: weight for each connection (90) and a bias for each hidden and output neuron (10)
-
+        
         allWList = []
         allBList = []
 
@@ -225,7 +224,6 @@ def main():
 
 
 def graphUpdate(frame):
-    # frames are for some reason starting at 1 and counting up by 2
     xdata.append(frame)
     try: 
         ydata.append(percentagesCorrect[int(frame)])
@@ -269,3 +267,6 @@ if __name__ == "__main__":
                                     blit=True
     )
     plt.show()
+
+    
+    
