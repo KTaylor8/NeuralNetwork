@@ -167,10 +167,10 @@ class network():
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
 
-        self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
+        self.w = [w - (self.learningRate/(len(self.layerSizes)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
 
-        self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
+        self.b = [b - (self.learningRate/(len(self.layerSizes)) *
                   nablaB for b, nablaB in zip(self.b, nablaB)]
 
     def backprop(self, expOut, inputs):
@@ -205,11 +205,8 @@ class network():
             weightedSum = weightedSumList[-L]
             sp = self.sigmoidPrime(weightedSum)
             error = np.dot(self.w[-L+1].transpose(), error) * sp
-            # print(nablaB[-L])
             nablaB[-L] = error
-            # print(f"nablaB array for layer {-L}: {nablaB[-L]}")
             nablaW[-L] = np.dot(error, activations[-L-1].transpose())
-            # print(f"nablaW array for layer {-L}: {nablaW[-L]}")
         return nablaB, nablaW
 
     def sigmoidPrime(self, s):

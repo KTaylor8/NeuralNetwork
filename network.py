@@ -58,7 +58,7 @@ class network():
         """
 
         with open(
-                r"ticTacToeData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -127,6 +127,7 @@ class network():
         #     expOut = "negative"
 
         expOut = activation[0][0]
+        print (expOut)
         return expOut
 
     def sigmoid(self, dotProdSum):
