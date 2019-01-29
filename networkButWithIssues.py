@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 
+
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -14,7 +15,8 @@ class network():
         """
         self.layerSizes = layerSizes
         self.learningRate = learningRate
-        
+        # lists in which each element is an array for each layer, which each contain the connections/neurons for that layer: weight for each connection (90) and a bias for each hidden and output neuron (10)
+
         allWList = []
         allBList = []
 
@@ -53,11 +55,11 @@ class network():
 
     def runNetwork(self):
         """
-        This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
+        This part of the program will prepare each minibatch's inputs to be fed through the network and serve as the base of the network to pass information between other functions in the network.
         """
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -66,7 +68,7 @@ class network():
             numCorrect = 0
             for minibatch in minibatches:
                 tOut = minibatch[9]
-                minibatchInputs = minibatch[0:9] 
+                minibatchInputs = minibatch[0:9]  # end is exclusive
                 inputs = np.reshape(
                     (np.asarray(minibatchInputs)),
                     (self.layerSizes[0], 1)
@@ -87,7 +89,7 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-            print(f"Accuracy rates: {accuracyRates}")
+            print(f"Accuracy rates in groups of {groupsOf}: {accuracyRates}")
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
@@ -104,9 +106,9 @@ class network():
                     minibatchSplit[i] = 0.0
 
             if minibatchSplit[9] == 'positive':  # theoretical output
-                minibatchSplit[9] = 1.0
+                    minibatchSplit[9] = 1.0
             elif minibatchSplit[9] == 'negative':
-                minibatchSplit[9] = 0.0
+                minibatchSplit[9] == 0.0
             minibatches.append(minibatchSplit)
         return minibatches
 
@@ -119,7 +121,6 @@ class network():
             inputs = activation
             # 1st iteration returns an array of 9 single element lists
         expOut = activation[0][0]
-        print (expOut)
         return expOut
 
     def sigmoid(self, dotProdSum):
@@ -131,7 +132,7 @@ class network():
 
     def updateWB(self, expOut, inputs):
         """
-        Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate
+        Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate.
         """
 
         nablaW = [np.zeros(layer.shape) for layer in self.w]
@@ -225,11 +226,9 @@ def main():
 
 
 def graphUpdate(frame):
+    # frames are for some reason starting at 1 and counting up by 2
     xdata.append(frame)
-    try: 
-        ydata.append(percentagesCorrect[int(frame)])
-    except IndexError:
-        0 == 0 
+    ydata.append(percentagesCorrect[int(frame)])
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
     graphLine.set_data(xdata, ydata)
     return graphLine,
@@ -242,7 +241,7 @@ if __name__ == "__main__":
 
     plt.switch_backend('TkAgg')
 
-    #initialize graph:
+    # initialize graph:
     fig, ax = plt.subplots()
     graphLine, = plt.plot([], [], 'r-', animated=True)
     redPatch = mpatches.Patch(color='red',label='Network')
@@ -268,6 +267,3 @@ if __name__ == "__main__":
                                     blit=True
     )
     plt.show()
-
-    
-    
