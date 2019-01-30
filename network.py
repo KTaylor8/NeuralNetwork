@@ -5,6 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
+import time
 
 class network():
 
@@ -65,6 +66,7 @@ class network():
             accuracyRates = []
             numCorrect = 0
             for minibatch in minibatches:
+                print(minibatch) #how is his data structured differently from ours and why is there a for loop in his UpdateWD?
                 tOut = minibatch[9]
                 minibatchInputs = minibatch[0:9] 
                 inputs = np.reshape(
@@ -87,6 +89,7 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
+                time.sleep(5)
             print(f"Accuracy rates: {accuracyRates}")
             return accuracyRates
 
@@ -147,20 +150,18 @@ class network():
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
 
-        self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaW for w, nablaW in zip(self.w, nablaW)]
+        self.w = [layer - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaW for layer, nablaW in zip(self.w, nablaW)]
 
-        self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaB for b, nablaB in zip(self.b, nablaB)]
+        self.b = [layer - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaB for layer, nablaB in zip(self.b, nablaB)]
 
     def backprop(self, expOut, inputs):
         """
         Uses feedforward of network to calculate error for output layer, uses that to backpropagate error to other layers, and finally find the change in weights and biases based on the errors
         """
         nablaW = [np.zeros(layer.shape) for layer in self.w]
-        # print(nablaW)
         nablaB = [np.zeros(layer.shape) for layer in self.b]
-        # print(nablaB)
         activation = inputs
         activations = [inputs]
         weightedSumList = []
@@ -190,6 +191,10 @@ class network():
             # print(f"nablaB array for layer {-L}: {nablaB[-L]}")
             nablaW[-L] = np.dot(error, activations[-L-1].transpose())
             # print(f"nablaW array for layer {-L}: {nablaW[-L]}")
+        
+        # print(f"nablaW: {nablaW}")
+        # print(f"nablaB: {nablaB}")
+
         return nablaB, nablaW
 
     def sigmoidPrime(self, s):
