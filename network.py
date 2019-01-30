@@ -5,7 +5,7 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
-
+import time
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -88,6 +88,7 @@ class network():
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
             print(f"Accuracy rates: {accuracyRates}")
+            
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
@@ -119,7 +120,6 @@ class network():
             inputs = activation
             # 1st iteration returns an array of 9 single element lists
         expOut = activation[0][0]
-        print (expOut)
         return expOut
 
     def sigmoid(self, dotProdSum):
@@ -144,15 +144,18 @@ class network():
 
         nablaW = [nablaW + deltaNablaW for nablaW,
                   deltaNablaW in zip(nablaW, deltaNablaW)]
-
+        print(nablaW)
+        time.sleep(5)
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
-
+        print(nablaB)
+        time.sleep(5)
         self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
-
+        #print(self.w)
         self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaB for b, nablaB in zip(self.b, nablaB)]
+        #print(self.b)
 
     def backprop(self, expOut, inputs):
         """
