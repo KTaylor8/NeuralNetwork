@@ -74,7 +74,7 @@ class network():
                     (self.layerSizes[0], 1)
                 )  # (rows, columns)
                 expOut = self.feedforward(inputs)
-                self.updateWB(expOut, inputs)
+                self.updateWB(inputs, expOut)
 
                 # evaluate accuracy of predictions:
                 expOut = round(expOut)
@@ -131,7 +131,7 @@ class network():
         activation = 1/(1+np.exp(-dotProdSum))
         return activation
 
-    def updateWB(self, expOut, inputs):
+    def updateWB(self, inputs, expOut):
         """
         Updates the weights and biases of the network based on the partial derivatives of the cost function. Variables are self (class specific variable), the list miniBatch, and the learning rate
         """
@@ -142,7 +142,7 @@ class network():
         # print(nablaB)
 
         deltaNablaB, deltaNablaW = self.backprop(
-            expOut, inputs)
+            inputs, expOut)
 
         nablaW = [nablaW + deltaNablaW for nablaW,
                   deltaNablaW in zip(nablaW, deltaNablaW)]
@@ -150,13 +150,13 @@ class network():
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
 
-        self.w = [layer - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaW for layer, nablaW in zip(self.w, nablaW)]
+        self.w = [wArr - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaW for wArr, nablaW in zip(self.w, nablaW)]
 
-        self.b = [layer - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaB for layer, nablaB in zip(self.b, nablaB)]
+        self.b = [wArr - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaB for wArr, nablaB in zip(self.b, nablaB)]
 
-    def backprop(self, expOut, inputs):
+    def backprop(self, inputs, expOut):
         """
         Uses feedforward of network to calculate error for output layer, uses that to backpropagate error to other layers, and finally find the change in weights and biases based on the errors
         """
