@@ -6,7 +6,10 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 import time
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7cb570a57452be262a7ac61a6c793f45e6af3bd3
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -58,7 +61,7 @@ class network():
         """
 
         with open(
-                r"ticTacToeData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -91,6 +94,7 @@ class network():
                 minibatchNum = minibatchNum + 1
                 time.sleep(5)
             print(f"Accuracy rates: {accuracyRates}")
+            
             return accuracyRates
 
     def makeMinibatchesList(self, dataFile):
@@ -146,15 +150,18 @@ class network():
 
         nablaW = [nablaW + deltaNablaW for nablaW,
                   deltaNablaW in zip(nablaW, deltaNablaW)]
-
+        print(nablaW)
+        time.sleep(5)
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
-
-        self.w = [wArr - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaW for wArr, nablaW in zip(self.w, nablaW)]
-
-        self.b = [wArr - (self.learningRate/(self.layerSizes[0]+1)) *
-                  nablaB for wArr, nablaB in zip(self.b, nablaB)]
+        print(nablaB)
+        time.sleep(5)
+        self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaW for w, nablaW in zip(self.w, nablaW)]
+        #print(self.w)
+        self.b = [b - (self.learningRate/(self.layerSizes[0]+1)) *
+                  nablaB for b, nablaB in zip(self.b, nablaB)]
+        #print(self.b)
 
     def backprop(self, inputs, expOut):
         """
