@@ -6,10 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 import time
-<<<<<<< HEAD
-
-=======
->>>>>>> 7cb570a57452be262a7ac61a6c793f45e6af3bd3
 class network():
 
     def __init__(self, layerSizes, learningRate):
