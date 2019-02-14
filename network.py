@@ -6,10 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.patches as mpatches
 import time
-<<<<<<< HEAD
 
-=======
->>>>>>> 7cb570a57452be262a7ac61a6c793f45e6af3bd3
 class network():
 
     def __init__(self, layerSizes, learningRate):
@@ -61,7 +58,7 @@ class network():
         """
 
         with open(
-                r"C:\Users\s-2508690\Desktop\NeuralNetwork\ticTacToeData.csv", newline=''
+                r"ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -69,7 +66,7 @@ class network():
             accuracyRates = []
             numCorrect = 0
             for minibatch in minibatches:
-                print(minibatch) #how is his data structured differently from ours and why is there a for loop in his UpdateWD?
+                # print(minibatch) #how is his data structured differently from ours and why is there a for loop in his UpdateWD?
                 tOut = minibatch[9]
                 minibatchInputs = minibatch[0:9] 
                 inputs = np.reshape(
@@ -92,7 +89,7 @@ class network():
                     accuracyRates.append(percentsCorrect)
                     numCorrect = 0
                 minibatchNum = minibatchNum + 1
-                time.sleep(5)
+                # time.sleep(1)
             print(f"Accuracy rates: {accuracyRates}")
             
             return accuracyRates
@@ -141,21 +138,19 @@ class network():
         """
 
         nablaW = [np.zeros(layer.shape) for layer in self.w]
-        # print(nablaW)
         nablaB = [np.zeros(layer.shape) for layer in self.b]
-        # print(nablaB)
 
         deltaNablaB, deltaNablaW = self.backprop(
             inputs, expOut)
 
         nablaW = [nablaW + deltaNablaW for nablaW,
                   deltaNablaW in zip(nablaW, deltaNablaW)]
-        print(nablaW)
-        time.sleep(5)
+        # print(nablaW)
+        # time.sleep(0.5)
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
-        print(nablaB)
-        time.sleep(5)
+        # print(nablaB)
+        # time.sleep(0.5)
         self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
         #print(self.w)
@@ -230,7 +225,7 @@ def main():
     outputNuerons = 1  # debugging
     neuronsPerLayer = [inputNuerons, inputNuerons, outputNuerons]
     # learningRate = float(input("What's the learning rate \n"))
-    learningRate = 1  # debugging
+    learningRate = 0.8  # debugging
     network1 = network(neuronsPerLayer, learningRate)
     return network1.runNetwork()
 
@@ -240,7 +235,7 @@ def graphUpdate(frame):
     try: 
         ydata.append(percentagesCorrect[int(frame)])
     except IndexError:
-        0 == 0 
+        pass
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
     graphLine.set_data(xdata, ydata)
     return graphLine,
