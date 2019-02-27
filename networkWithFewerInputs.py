@@ -76,7 +76,9 @@ class network():
                 self.updateWB(inputs, expOut)
 
                 # evaluate accuracy of predictions:
-                expOut = round(expOut)
+                # expOut = round(expOut, 2)
+                print(f"expOut: {expOut}; tOut: {tOut}")
+                #It's being weird and not changing the exp out anymore
                 if expOut == tOut:
                     numCorrect = numCorrect + 1
 
@@ -117,6 +119,7 @@ class network():
             inputs = activation
             # 1st iteration returns an array of 9 single element lists
         expOut = activation[0][0]
+        time.sleep(0.2)
         return expOut
 
     def sigmoid(self, dotProdSum):
@@ -144,7 +147,7 @@ class network():
         nablaB = [nablaB + deltaNablaB for nablaB,
                   deltaNablaB in zip(nablaB, deltaNablaB)]
         print(f'delta bias: {self.b}')
-        time.sleep(0.5)
+        # time.sleep(0.5)
         self.w = [w - (self.learningRate/(self.layerSizes[0]+1)) *
                   nablaW for w, nablaW in zip(self.w, nablaW)]
         # print(f'weights: {self.w}')
