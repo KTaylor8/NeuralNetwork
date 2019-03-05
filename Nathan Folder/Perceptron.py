@@ -23,8 +23,8 @@ class perceptron():
 
         self.b.append(random.uniform(-1, 1))
         #not generating weights and biases
-        print(self.w)
-        print(self.b)
+        #print(self.w)
+        #print(self.b)
 
     def readCSV(self, datafile):
 
@@ -56,16 +56,16 @@ class perceptron():
                     self.updateWB(inputs, preOutput)
                     miniBatchNum = miniBatchNum + 1
 
-                if preOutput == self.reqOutput:
-                    numCorrect = numCorrect + 1
+                    if preOutput == self.reqOutput:
+                        numCorrect = numCorrect + 1
 
-                groupsOf = 50
-                if miniBatchNum % groupsOf == 0:
-                    percentsCorrect = float(
-                        round((numCorrect/groupsOf)*100)
-                    )
-                    accuracyRates.append(percentsCorrect)
-                    numCorrect = 0
+                    groupsOf = 10
+                    if miniBatchNum % groupsOf == 0:
+                        percentsCorrect = float(
+                            round((numCorrect/groupsOf)*100)
+                        )
+                        accuracyRates.append(percentsCorrect)
+                        numCorrect = 0
                 miniBatchNum = miniBatchNum + 1
             print(f"Accuracy Rates: {accuracyRates}") 
             return accuracyRates
@@ -81,9 +81,8 @@ class perceptron():
         #trying to concentate generate with list
         self.w = np.add(self.w, nablaW)
         self.b = np.add(self.b, nablaB)
-        print("The new weights are", self.w)
-        print("The new biases are", self.b)
-        time.sleep(5)
+        #print("The new weights are", self.w)
+        #print("The new biases are", self.b)
 
 
     def backprop(self, inputs, reqOutput):
@@ -98,8 +97,8 @@ class perceptron():
         error = self.costderivative(activations[-1])
         nablaW = list((error * self.learningRate * i) for i in inputs)
         nablaB = (error * self.learningRate)
-        print(f"the changes in biases are {nablaB}")
-        print(f"the changes in weights are {nablaW}")
+        #print(f"the changes in biases are {nablaB}")
+        #print(f"the changes in weights are {nablaW}")
         return nablaW, nablaB
 
     def feedforward(self, inputs):
@@ -143,6 +142,7 @@ def graphUpdate(frame):
     except IndexError:
         pass
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
+    print(ydata)
     graphLine.set_data(xdata, ydata)
     return graphLine,
 
@@ -179,6 +179,3 @@ if __name__ == "__main__":
                                     blit=True
     )
     plt.show()
-
-    
-    
