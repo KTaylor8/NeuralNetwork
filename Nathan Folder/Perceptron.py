@@ -22,7 +22,6 @@ class perceptron():
             self.w.append(random.uniform(-1, 1))
 
         self.b.append(random.uniform(-1, 1))
-        #not generating weights and biases
         #print(self.w)
         #print(self.b)
 
@@ -78,7 +77,6 @@ class perceptron():
         deltaNablaW, deltaNablaB = self.backprop(inputs, preOutput)
         nablaB = deltaNablaB
         nablaW = deltaNablaW
-        #trying to concentate generate with list
         self.w = np.add(self.w, nablaW)
         self.b = np.add(self.b, nablaB)
         #print("The new weights are", self.w)
