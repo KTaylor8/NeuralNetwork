@@ -43,7 +43,7 @@ class perceptron():
 
     def runPerceptron(self):
         with open(
-            r"sonar.all-data.csv"
+            r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
         ) as datafile:
             miniBatchNum = 1
             accuracyRates = []
@@ -113,6 +113,12 @@ class perceptron():
         preOutput = 0.0
         if dotProduct >= 0.0:
             preOutput = 1.0
+<<<<<<< HEAD
+=======
+        elif dotProduct < 0.0:
+            preOutput = 0.0
+
+>>>>>>> 18a6c063a8d07a060774c3771f0dab7abd72b4b1
         return preOutput
 
     # something with sigmoid function reduces the scale of changes
