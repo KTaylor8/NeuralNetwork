@@ -19,7 +19,7 @@ class perceptron():
         self.epochs = epochs
         inputN = layerSizes[1]
 
-        for n in range(60):
+        for num in range(60):
             self.w.append(random.uniform(-1, 1))
 
         self.b.append(random.uniform(-1, 1))
@@ -48,11 +48,11 @@ class perceptron():
             miniBatchNum = 1
             accuracyRates = []
             numCorrect = 0
-            for i in range(self.epochs):
+            for epoch in range(self.epochs):
                 minibatches = self.readCSV(datafile)
 
                 for minibatch in minibatches:
-                    inputs = minibatch[0:60]
+                    inputs = minibatch[0:self.layerSizes[0]]
                     self.reqOutput = minibatch[-1]
                     preOutput = self.feedforward(inputs)
                     self.updateWB(inputs, preOutput)
@@ -61,7 +61,7 @@ class perceptron():
                     if preOutput == self.reqOutput:
                         numCorrect = numCorrect + 1
 
-                    groupsOf = 20
+                    groupsOf = 10
                     if miniBatchNum % groupsOf == 0:
                         percentsCorrect = float(
                             round((numCorrect/groupsOf)*100)
@@ -110,13 +110,9 @@ class perceptron():
         return preOutput
 
     def step(self, dotProduct):
-
-        preOutput = 0
+        preOutput = 0.0
         if dotProduct >= 0.0:
             preOutput = 1.0
-        elif dotProduct > 0.0:
-            preOutput = 0.0
-
         return preOutput
 
     # something with sigmoid function reduces the scale of changes
@@ -134,7 +130,7 @@ def main():
     outputneurons = 1
     layerSizes = [inputneurons, hiddenneurons, outputneurons]
     learningRate = 0.14
-    epochs = 2
+    epochs = 50
     runnetwork = perceptron(layerSizes, learningRate, epochs)
     return runnetwork.runPerceptron()
 
@@ -146,7 +142,7 @@ def graphUpdate(frame):
     except IndexError:
         pass
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
-    print(ydata)
+    # print(ydata)
     graphLine.set_data(xdata, ydata)
     return graphLine,
 
