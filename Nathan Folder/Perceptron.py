@@ -146,6 +146,7 @@ def graphUpdate(frame):
     except IndexError:
         pass
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
+    print(ydata)
     graphLine.set_data(xdata, ydata)
     return graphLine,
 
