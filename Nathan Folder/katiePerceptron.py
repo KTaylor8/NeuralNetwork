@@ -23,14 +23,9 @@ class perceptron():
             self.w.append(random.uniform(-1, 1))
 
         self.b.append(random.uniform(-1, 1))
-<<<<<<< HEAD
-        #print(self.w)
-        #print(self.b)
-=======
         # not generating weights and biases
         # print(self.w)
         # print(self.b)
->>>>>>> bade7e4f23f240b452d006b3930af9ebb6ad626f
 
     def readCSV(self, datafile):
 
@@ -85,10 +80,7 @@ class perceptron():
         deltaNablaW, deltaNablaB = self.backprop(inputs, preOutput)
         nablaB = deltaNablaB
         nablaW = deltaNablaW
-<<<<<<< HEAD
-=======
         # trying to concentate generate with list
->>>>>>> bade7e4f23f240b452d006b3930af9ebb6ad626f
         self.w = np.add(self.w, nablaW)
         self.b = np.add(self.b, nablaB)
         # print("The new weights are", self.w)
@@ -154,7 +146,6 @@ def graphUpdate(frame):
     except IndexError:
         pass
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
-    print(ydata)
     graphLine.set_data(xdata, ydata)
     return graphLine,
 
