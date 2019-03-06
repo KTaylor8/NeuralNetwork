@@ -23,14 +23,9 @@ class perceptron():
             self.w.append(random.uniform(-1, 1))
 
         self.b.append(random.uniform(-1, 1))
-<<<<<<< HEAD
-        #print(self.w)
-        #print(self.b)
-=======
         # not generating weights and biases
         # print(self.w)
         # print(self.b)
->>>>>>> bade7e4f23f240b452d006b3930af9ebb6ad626f
 
     def readCSV(self, datafile):
 
@@ -48,7 +43,7 @@ class perceptron():
 
     def runPerceptron(self):
         with open(
-            r"sonar.all-data.csv"
+            r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
         ) as datafile:
             miniBatchNum = 1
             accuracyRates = []
@@ -85,10 +80,7 @@ class perceptron():
         deltaNablaW, deltaNablaB = self.backprop(inputs, preOutput)
         nablaB = deltaNablaB
         nablaW = deltaNablaW
-<<<<<<< HEAD
-=======
         # trying to concentate generate with list
->>>>>>> bade7e4f23f240b452d006b3930af9ebb6ad626f
         self.w = np.add(self.w, nablaW)
         self.b = np.add(self.b, nablaB)
         # print("The new weights are", self.w)
@@ -122,7 +114,7 @@ class perceptron():
         preOutput = 0
         if dotProduct >= 0.0:
             preOutput = 1.0
-        elif dotProduct > 0.0:
+        elif dotProduct < 0.0:
             preOutput = 0.0
 
         return preOutput
@@ -142,7 +134,7 @@ def main():
     outputneurons = 1
     layerSizes = [inputneurons, hiddenneurons, outputneurons]
     learningRate = 0.14
-    epochs = 2
+    epochs = 50
     runnetwork = perceptron(layerSizes, learningRate, epochs)
     return runnetwork.runPerceptron()
 
