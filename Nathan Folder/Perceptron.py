@@ -43,33 +43,35 @@ class perceptron():
 
     def runPerceptron(self):
         with open(
-            r"sonar.all-data.csv"
-            # r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
+            #r"sonar.all-data.csv"
+             r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
         ) as datafile:
             miniBatchNum = 1
             accuracyRates = []
             numCorrect = 0
+            minibatches = self.readCSV(datafile)
+
             for epoch in range(self.epochs):
-                minibatches = self.readCSV(datafile)
 
                 for minibatch in minibatches:
                     inputs = minibatch[0:self.layerSizes[0]]
                     self.reqOutput = minibatch[-1]
                     preOutput = self.feedforward(inputs)
                     self.updateWB(inputs, preOutput)
-                    miniBatchNum = miniBatchNum + 1
 
                     if preOutput == self.reqOutput:
                         numCorrect = numCorrect + 1
 
-                    groupsOf = 20
+                    groupsOf = 50
                     if miniBatchNum % groupsOf == 0:
                         percentsCorrect = float(
                             round((numCorrect/groupsOf)*100)
                         )
                         accuracyRates.append(percentsCorrect)
                         numCorrect = 0
-                miniBatchNum = miniBatchNum + 1
+
+                    miniBatchNum = miniBatchNum + 1
+
             print(f"Accuracy Rates: {accuracyRates}")
             return accuracyRates
 
@@ -131,7 +133,7 @@ def main():
     outputneurons = 1
     layerSizes = [inputneurons, hiddenneurons, outputneurons]
     learningRate = 0.14
-    epochs = 70
+    epochs = 10
     runnetwork = perceptron(layerSizes, learningRate, epochs)
     return runnetwork.runPerceptron()
 
