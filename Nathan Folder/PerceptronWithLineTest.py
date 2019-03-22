@@ -147,6 +147,8 @@ def graphUpdate(frame):
     # Set the x and y data; ACCEPTS: 2D array (rows are x, y) or two 1D arrays
     # print(ydata)
     graphLine.set_data(xdata, ydata)
+    global xdata
+    global ydata
     return graphLine,
 
 
@@ -183,4 +185,36 @@ if __name__ == "__main__":
                                   ),
                                   blit=True
                                   )
+
+    # NEED TO INSTALL PLOTLY https://plot.ly/matplotlib/polynomial-fits/
+    import plotly.plotly as py
+
+    # MatPlotlib
+    from matplotlib import pylab
+
+    coordinateList = []
+    for xCoordinate, yCoordinate in xdata, ydata:
+        coordinateList.append((xCoordinate, yCoordinate))
+    points = np.array(coordinateList)
+
+    # get x and y vectors
+    x = points[:, 0]
+    y = points[:, 0]
+
+    # calculate polynomial
+    z = np.polyfit(x, y, 3)
+    f = np.poly1d(z)
+    print(f"f: {f}")
+
+    # calculate new x's and y's
+    x_new = np.linspace(x[0], x[-1], 50)
+    y_new = f(x_new)
+
+    plt.plot(x, y, 'o', x_new, y_new)
+    pylab.title('Polynomial Fit with Matplotlib')
+    ax = plt.gca()
+    ax.set_axis_bgcolor((0.898, 0.898, 0.898))
+    fig = plt.gcf()
+    py.plot_mpl(fig, filename='polynomial-Fit-with-matplotlib')
+
     plt.show()
