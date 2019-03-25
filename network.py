@@ -58,7 +58,7 @@ class network():
         """
 
         with open(
-                r"ticTacToeData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\ticTacToeData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
