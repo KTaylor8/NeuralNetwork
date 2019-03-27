@@ -17,8 +17,8 @@ model.compile(optimizer='SGD',  # this is the type of backprop
 
 inputs = []
 outputs = []
-#C:\Users\s-2508690\Desktop\NeuralNetwork
-with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\sonar.all-data.csv", newline=''
+# C:\Users\s-2508690\Desktop\NeuralNetwork
+with open(r"sonar.all-data.csv", newline=''
           ) as dataFile:
     for row in dataFile:
         dataSplit = row.strip().split(",")
@@ -33,27 +33,26 @@ with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\sonar.all-data.csv", newlin
 data = np.asarray((inputs))
 labels = np.asarray((outputs))
 
-# model.fit(training data, experimental output, batch_size=num samples per gradient update)
+# model.fit(training data, experimental output, batch_size=num samples per gradient update (lower num means learns more quickly initially but doesn't increase maximum accuracy))
 
-history = model.fit(data, labels, validation_split=0.25,
-                    epochs=50, batch_size=16, verbose=1)
+history = model.fit(data, labels, epochs=50, batch_size=2)
 
 model.summary()
 
-# Plot training & validation accuracy values
-plt.plot(history.history[metrics.binary_accuracy])
-plt.plot(history.history['val_acc'])
+# print(history.history.keys()) #provides keys to plot
+
+# Plot accuracy rates
+plt.plot(np.asarray(history.history["binary_accuracy"])*100)
 plt.title('Model accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
+axes = plt.gca()
+axes.set_ylim(40, 100)
 plt.show()
 
-# Plot training & validation loss values
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('Model loss')
-plt.ylabel('Loss')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Test'], loc='upper left')
-plt.show()
+# # Plot loss (cost) values
+# plt.plot(history.history['loss'])
+# plt.title('Model loss')
+# plt.ylabel('Loss')
+# plt.xlabel('Epoch')
+# plt.show()
