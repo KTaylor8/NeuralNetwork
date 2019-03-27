@@ -3,7 +3,8 @@ from keras.layers import Dense, Activation, Flatten
 import keras.utils
 import csv
 import numpy as np
-
+from numpy.core import umath
+from numpy.core import _multiarray_umath
 model = Sequential()
 
 # model.add(Flatten())
@@ -15,8 +16,8 @@ model.compile(optimizer='rmsprop',
               metrics=['accuracy'])
 
 data = []
-with open(r"powerPlantData.csv", newline=''
-          ) as dataFile:
+#C:\Users\s-2508690\Desktop\NeuralNetwork
+with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\sonar.all-data.csv",               newline='') as dataFile:
     for row in dataFile:
         dataSplit = row.strip().split(",")
     data.append(dataSplit)
