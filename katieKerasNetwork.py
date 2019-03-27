@@ -17,7 +17,8 @@ model.compile(optimizer='SGD',  # this is the type of backprop
 
 inputs = []
 outputs = []
-with open(r"sonar.all-data.csv", newline=''
+#C:\Users\s-2508690\Desktop\NeuralNetwork
+with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\sonar.all-data.csv", newline=''
           ) as dataFile:
     for row in dataFile:
         dataSplit = row.strip().split(",")

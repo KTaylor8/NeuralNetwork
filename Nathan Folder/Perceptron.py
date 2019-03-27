@@ -19,6 +19,7 @@ class perceptron():
         self.epochs = epochs
         inputN = layerSizes[1]
 
+        #60 inputs, 1 output
         for num in range(60):
             self.w.append(random.uniform(-1, 1))
 
@@ -43,7 +44,7 @@ class perceptron():
 
     def runPerceptron(self):
         with open(
-            r"sonar.all-data.csv"
+            r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
             #  r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
         ) as datafile:
             miniBatchNum = 1
@@ -132,7 +133,7 @@ def main():
     hiddenNeurons = 1
     outputNeurons = 1
     layerSizes = [inputNeurons, hiddenNeurons, outputNeurons]
-    learningRate = 0.14
+    learningRate = 0.01
     epochs = 10
     runNetwork = perceptron(layerSizes, learningRate, epochs)
     return runNetwork.runPerceptron()
