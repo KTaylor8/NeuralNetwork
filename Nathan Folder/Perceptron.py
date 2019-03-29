@@ -19,7 +19,7 @@ class perceptron():
         self.epochs = epochs
         inputN = layerSizes[1]
 
-        #60 inputs, 1 output
+        # 60 inputs, 1 output
         for num in range(60):
             self.w.append(random.uniform(-1, 1))
 
