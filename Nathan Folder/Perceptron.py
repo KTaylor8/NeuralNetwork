@@ -19,12 +19,19 @@ class perceptron():
         self.epochs = epochs
         inputN = layerSizes[1]
 
+<<<<<<< HEAD
         for num in range(60):
             self.w.append(random.uniform(-1, 1))
+=======
+        #60 inputs, 1 output
+        for num in range(layerSizes[1]):
+            for num in range(layerSizes[0]):
+                self.w.append(random.uniform(-1, 1))
+>>>>>>> 9a50a2d5697ac1ab8591cffc02a5868819e28b90
 
         self.b.append(random.uniform(-1, 1))
         # not generating weights and biases
-        # print(self.w)
+        print(self.w)
         # print(self.b)
 
     def readCSV(self, datafile):
@@ -132,8 +139,13 @@ def main():
     hiddenNeurons = 1
     outputNeurons = 1
     layerSizes = [inputNeurons, hiddenNeurons, outputNeurons]
+<<<<<<< HEAD
     learningRate = 0.14
     epochs = 10
+=======
+    learningRate = 0.01
+    epochs = 50
+>>>>>>> 9a50a2d5697ac1ab8591cffc02a5868819e28b90
     runNetwork = perceptron(layerSizes, learningRate, epochs)
     return runNetwork.runPerceptron()
 
@@ -170,7 +182,8 @@ if __name__ == "__main__":
 
     ticksList = []
     for i in range(1, numIterationsLimit):
-        ticksList.append(i)
+        if i % 20 == 0:
+            ticksList.append(i)
     ax.set_xticks(ticksList)
 
     xdata, ydata = [], []
