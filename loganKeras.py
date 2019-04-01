@@ -1,17 +1,16 @@
-#Katie's most recent code
-
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras import optimizers, metrics
 import keras.utils
 import csv
 import numpy as np
+import matplotlib.pyplot as plt
 
 model = Sequential()  # sets up network to be linear stack of layers
 
 # adds 32 layers with the activation function relu and 5 inputs
 
-model.add(Dense(1, activation='relu', input_dim=60))
+model.add(Dense(1, activation='tanh', input_dim=60))
 # adds 10 layers with the activation function softmax
 # model.add(Dense(10, activation='softmax'))
 # .compile() initializes network type
@@ -25,14 +24,26 @@ with open(r"sonar.all-data.csv", newline=''
           ) as dataFile:
     for row in dataFile:
         dataSplit = row.strip().split(",")
-        inputs.append(float(i) for i in dataSplit[0:60])
-        if dataSplit[60] == 'M':  # theoretical output
-            outputs.append(1.0)
-        elif dataSplit[60] == 'R':
-            outputs.append(0.0)
+        for i in range(len(dataSplit)-1):
+            dataSplit[i] = float(dataSplit[i])
+            if dataSplit[-1] == 'M': # theoretical output
+                dataSplit[-1] = 1.0
+            elif dataSplit[-1] == 'R':
+                dataSplit[-1] = 0.0
+        inputs.append(dataSplit[0:60])
         outputs.append(dataSplit[60])
 data = np.asarray((inputs))
 labels = np.asarray((outputs))
-model.fit(data, labels, epochs=20, batch_size=10)
+history = model.fit(data, labels, epochs=5000, batch_size=1)
 
+print(history.history.keys())
 model.summary()
+
+axes = plt.gca()
+plt.plot((np.asarray(history.history['binary_accuracy']))*100)
+plt.title('Model accuracy') 
+axes.set_ylim([40,100])
+plt.ylabel('Accuracy') 
+plt.xlabel('Epoch') 
+plt.legend(['Train', 'Test'], loc='upper left') 
+plt.show()
