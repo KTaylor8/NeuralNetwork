@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 model = Sequential()  # sets up network to be linear stack of layers
 
-model.add(Dense(1, activation='relu', input_dim=60))
+model.add(Dense(1, activation='tanh', input_dim=60))
 # adds a layer with the activation function relu, 60 inputs, and 1 output
 
 # .compile() initializes network type
@@ -17,7 +17,6 @@ model.compile(optimizer='SGD',  # this is the type of backprop
 
 inputs = []
 outputs = []
-# C:\Users\s-2508690\Desktop\NeuralNetwork
 with open(r"sonar.all-data.csv", newline=''
           ) as dataFile:
     for row in dataFile:
@@ -34,8 +33,7 @@ data = np.asarray((inputs))
 labels = np.asarray((outputs))
 
 # model.fit(training data, experimental output, batch_size=num samples per gradient update (lower num means learns more quickly initially but doesn't increase maximum accuracy))
-
-history = model.fit(data, labels, epochs=50, batch_size=2)
+history = model.fit(data, labels, epochs=5000, batch_size=1)
 
 model.summary()
 
