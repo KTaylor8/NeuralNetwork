@@ -1,15 +1,22 @@
 from PIL import Image
+import numpy as np
 import glob
-
+import os
+import csv
 def main():
-    image_list = []
-    for filename in glob.glob('natural_images_grayscale/*.jpg'):
-            img = Image.open(filename)
-            im = img.histogram()
-            print(im, "1")
-            image_list.append(img)
-            
-    print(image_list)
+    os.getcwd()
+    os.chdir(r'C:\Users\s-2508690\Desktop\NeuralNetwork')
+    inputsList = []
+    print(glob.glob('natural_images_stretched/*.jpg'))
+    for filename in glob.glob('natural_images_stretched/*.jpg'):
+        inputsList.append(filename)
+    with open(r'C:\Users\s-2508690\Desktop\NeuralNetwork\imageData.csv'):
+        writer = csv.writer(r'C:\Users\s-2508690\Desktop\NeuralNetwork\imageData')
+        writer.writerows(inputsList)
+    print(inputsList)
+    #img = Image.open(filename)
+    #im = img.histogram()
+    #print(im, "1")
 
 if __name__ == "__main__":
     main()
