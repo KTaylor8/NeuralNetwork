@@ -12,7 +12,7 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    with open(r"naturalImagesScrambled.csv", newline=''
+    with open(r"naturalImagesFinal.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             dataSplit = row.strip().split(",")
@@ -28,7 +28,8 @@ def main():
 
     model = Sequential()
 
-    model.add(Dense(1, activation='hard_sigmoid', input_dim=10))
+    model.add(Dense(5, activation='sigmoid', input_dim=10))
+    model.add(Dense(1, activation='sigmoid', input_dim=5))
 
     model.compile(optimizer='SGD',
                   loss='mean_squared_error',

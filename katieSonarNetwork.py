@@ -33,7 +33,7 @@ data = np.asarray((inputs))
 labels = np.asarray((outputs))
 
 # model.fit(training data, experimental output, batch_size=num samples per gradient update (lower num means learns more quickly initially but doesn't increase maximum accuracy))
-history = model.fit(data, labels, epochs=5000, batch_size=1)
+history = model.fit(data, labels, epochs=200, batch_size=1)
 
 model.summary()
 
