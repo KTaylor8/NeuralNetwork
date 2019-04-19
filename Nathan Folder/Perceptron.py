@@ -140,6 +140,7 @@ def main():
     epochs = 50
     runNetwork = perceptron(layerSizes, learningRate, epochs)
     return runNetwork.runPerceptron()
+    print("\")
 
 
 def graphUpdate(frame):

@@ -1,16 +1,21 @@
 from PIL import Image
 import numpy as np
 import glob
-
+import os
+import csv
 
 def main():
+
     inputsList = []
+    os.getcwd()
+    os.chdir(r'C:\Users\s-2508690\Desktop\NeuralNetwork')
     for fileName in glob.glob('natural_images_stretched\\*.jpg'):
         inputs = np.histogram(Image.open(fileName))
         inputsList.append((fileName, inputs))
     # print(inputsList[0])
     with open("natural_images.csv", "r+") as dataFile:
         dataFile.write(str(inputsList))
+
 
 
 if __name__ == "__main__":
