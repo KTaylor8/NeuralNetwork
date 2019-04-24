@@ -12,7 +12,7 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    with open(r"naturalImagesFinal.csv", newline=''
+    with open(r"naturalImagesBinary.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             dataSplit = row.strip().split(",")
@@ -28,14 +28,37 @@ def main():
 
     model = Sequential()
 
-    model.add(Dense(5, activation='sigmoid', input_dim=10))
-    model.add(Dense(1, activation='sigmoid', input_dim=5))
+    # peaks at about 0.74 around 150 epochs
+    model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    model.add(Dense(activation='softmax', input_dim=50, units=50))
+    model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at about 0.74 around 150 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='softmax', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at about 0.730 around 110 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='exponential', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at about 0.735 around 70 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at 0.71 around 90 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=10))
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=1))
 
     model.compile(optimizer='SGD',
                   loss='mean_squared_error',
                   metrics=[metrics.binary_accuracy])
 
-    history = model.fit(data, labels, epochs=10, batch_size=1)
+    history = model.fit(data, labels, epochs=200, batch_size=1)
 
     model.summary()
 
