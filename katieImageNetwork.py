@@ -28,10 +28,10 @@ def main():
 
     model = Sequential()
 
-    # peaks at about 0.74 around 150 epochs
-    model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    model.add(Dense(activation='softmax', input_dim=50, units=50))
-    model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+    # peaks at about 0.75 around 120 epochs
+    model.add(Dense(activation='sigmoid', input_dim=10, units=70))
+    model.add(Dense(activation='sigmoid', input_dim=70, units=70))
+    model.add(Dense(activation='sigmoid', input_dim=70, units=1))
 
     # # peaks at about 0.74 around 150 epochs
     # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
@@ -58,7 +58,7 @@ def main():
                   loss='mean_squared_error',
                   metrics=[metrics.binary_accuracy])
 
-    history = model.fit(data, labels, epochs=200, batch_size=1)
+    history = model.fit(data, labels, epochs=170, batch_size=1)
 
     model.summary()
 
