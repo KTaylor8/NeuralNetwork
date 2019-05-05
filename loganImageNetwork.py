@@ -15,16 +15,24 @@ def main():
     with open(r"new_natural_images.csv", newline=''
               ) as dataFile:
         for row in dataFile:
-            dataSplit = row.strip().split(",")
-            if dataSplit[0][0:5] == "plane":
+            dataSplit = row.strip().split(";")
+            jpgName = dataSplit[0]
+            if jpgName[0:5] == "plane":
                 tOut = 1.0
             else:
                 tOut = 0.0
-            # for a in dataSplit:
-            #     intensities = a.strip(" []")
-            # print(intensities)
-            # basically, katie, i just need it to take out the spaces and brackets from each of the lines... i cant get it to do that. this commented code results in one number per image
-            inputs.append(intensities)
+            pixelData = dataSplit[1]
+            # dataSplit[] = dataSplit[1][1:-1]
+            # print(pixelData)
+            # now I can access just the pixel data, but it's all one big long string...
+            pixelData = pixelData.strip(" [[]]")
+            pixelData = pixelData.split("], [")
+            for triplet in pixelData:
+                intensities = triplet.split(",")
+                for i in range(len(intensities)):
+                    intensities[i] = int(intensities[i])
+                inputs.append(np.asarray(intensities))
+            # print(inputs)
             outputs.append(tOut)
     data = np.asarray(inputs)
     labels = outputs
@@ -35,27 +43,6 @@ def main():
     model.add(Dense(activation='sigmoid', input_dim=99, units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=1))
-
-    # # peaks at about 0.74 around 150 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='softmax', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at about 0.730 around 110 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='exponential', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at about 0.735 around 70 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at 0.71 around 90 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=10))
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=1))
 
     model.compile(optimizer='SGD',
                   loss='mean_squared_error',

@@ -13,7 +13,7 @@ def main():
             # inputs = str(inputs).strip("[]")
             inputs = str(inputs)
             fileName = fileName.strip("natural_images_stretched'\\'")
-            dataFile.write(f"{fileName}, {inputs}\n")
+            dataFile.write(f"{fileName}; {inputs}\n")
 
 
 if __name__ == "__main__":
