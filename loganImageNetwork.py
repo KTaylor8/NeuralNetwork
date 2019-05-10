@@ -22,25 +22,25 @@ def main():
             else:
                 tOut = 0.0
             pixelData = dataSplit[1]
-            # dataSplit[] = dataSplit[1][1:-1]
-            # print(pixelData)
-            # now I can access just the pixel data, but it's all one big long string...
             pixelData = pixelData.strip(" [[]]")
             pixelData = pixelData.split("], [")
             for triplet in pixelData:
                 intensities = triplet.split(",")
-                for i in range(len(intensities)):
-                    intensities[i] = int(intensities[i])
-                inputs.append(np.asarray(intensities))
-            # print(inputs)
+                inputs.append(int(intensities[0]))
             outputs.append(tOut)
-    data = np.asarray(inputs)
+    # data = (inputs)
+    # ValueError: Input arrays should have the same number of samples as target arrays. Found 1 input samples and 6899 target samples.
+    data = np.reshape(
+        (inputs),
+        (1, len(inputs))
+    )
+    print(data)
     labels = outputs
 
     model = Sequential()
 
     # peaks at about 0.75 around 120 epochs
-    model.add(Dense(activation='sigmoid', input_dim=99, units=70))
+    model.add(Dense(activation='sigmoid', input_dim=len(data), units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=1))
 
