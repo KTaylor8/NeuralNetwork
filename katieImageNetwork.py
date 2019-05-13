@@ -12,7 +12,8 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    with open(r"naturalImagesBinary.csv", newline=''
+    #C:\Users\s-2508690\Desktop\NeuralNetwork
+    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\naturalImagesBinary.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             dataSplit = row.strip().split(",")
@@ -29,9 +30,9 @@ def main():
     model = Sequential()
 
     # peaks at about 0.75 around 120 epochs
-    model.add(Dense(activation='sigmoid', input_dim=10, units=70))
-    model.add(Dense(activation='sigmoid', input_dim=70, units=70))
-    model.add(Dense(activation='sigmoid', input_dim=70, units=1))
+    model.add(Dense(activation='sigmoid', input_dim=10, units=60))
+    model.add(Dense(activation='sigmoid', input_dim=60, units=60))
+    model.add(Dense(activation='sigmoid', input_dim=60, units=1))
 
     # # peaks at about 0.74 around 150 epochs
     # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
