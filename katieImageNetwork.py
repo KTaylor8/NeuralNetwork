@@ -29,31 +29,11 @@ def main():
 
     model = Sequential()
 
-    # peaks at about 0.75 around 120 epochs
-    model.add(Dense(activation='sigmoid', input_dim=10, units=60))
-    model.add(Dense(activation='sigmoid', input_dim=60, units=60))
-    model.add(Dense(activation='sigmoid', input_dim=60, units=1))
-
-    # # peaks at about 0.74 around 150 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='softmax', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at about 0.730 around 110 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='exponential', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at about 0.735 around 70 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
-
-    # # peaks at 0.71 around 90 epochs
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
-    # model.add(Dense(activation='sigmoid', input_dim=50, units=10))
-    # model.add(Dense(activation='sigmoid', input_dim=10, units=1))
+    # peaks at an average of 0.76 around 120-140 epochs, got to 0.75 ~25 epochs
+    model.add(Dense(activation='sigmoid', input_dim=10, units=70))
+    model.add(Dense(activation='sigmoid', input_dim=70, units=80))
+    model.add(Dense(activation='sigmoid', input_dim=80, units=80))
+    model.add(Dense(activation='sigmoid', input_dim=80, units=1))
 
     model.compile(optimizer='SGD',
                   loss='mean_squared_error',

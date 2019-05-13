@@ -1,0 +1,35 @@
+	# # peaks at about 0.75 around 90 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=80))
+    # model.add(Dense(activation='sigmoid', input_dim=80, units=80))
+    # model.add(Dense(activation='sigmoid', input_dim=80, units=1))
+
+	# # peaks at about 0.74 around 90-120 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=75))
+    # model.add(Dense(activation='sigmoid', input_dim=75, units=75))
+    # model.add(Dense(activation='sigmoid', input_dim=75, units=1))
+
+    # # peaks at about 0.75 around 120 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=70))
+    # model.add(Dense(activation='sigmoid', input_dim=70, units=70))
+    # model.add(Dense(activation='sigmoid', input_dim=70, units=1))
+
+    # # peaks at about 0.74 around 150 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='softmax', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at about 0.730 around 110 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='exponential', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at about 0.735 around 70 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=1))
+
+    # # peaks at 0.71 around 90 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=50))
+    # model.add(Dense(activation='sigmoid', input_dim=50, units=10))
+    # model.add(Dense(activation='sigmoid', input_dim=10, units=1))
