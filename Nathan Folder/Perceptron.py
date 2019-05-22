@@ -44,8 +44,9 @@ class perceptron():
         return minibatches
 
     def runPerceptron(self):
+        #C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder
         with open(
-            r"sonar.all-data.csv"
+            r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
             #  r"C:\Users\s-2508690\Desktop\NeuralNetwork\Nathan Folder\sonar.all-data.csv"
         ) as datafile:
             miniBatchNum = 1
@@ -140,7 +141,6 @@ def main():
     epochs = 50
     runNetwork = perceptron(layerSizes, learningRate, epochs)
     return runNetwork.runPerceptron()
-    print("\")
 
 
 def graphUpdate(frame):
