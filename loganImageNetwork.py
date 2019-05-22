@@ -33,8 +33,8 @@ def main():
             inputs.append(minibatch)
             outputs.append(tOut)
 
-    # print(inputs)
-    # inputs = np.asarray(inputs) #Keras docs says arrays in list but oh well
+    # print(inputs[0])
+    # inputs = np.asarray(inputs)  # Keras docs says arrays in list but oh well
     outputs = np.asarray(outputs)
     model = Sequential()
 
