@@ -6,8 +6,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-# doesn't actually work; it misses the 10.5% of photos that are airplanes because there are too many non-airplanes in the data and it just says everything is not an airplane
-
 
 def main():
     inputs = []
