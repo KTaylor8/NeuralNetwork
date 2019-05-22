@@ -12,7 +12,8 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    with open(r"new_natural_images.csv", newline=''
+    #C:\Users\s-2508690\Desktop\NeuralNetwork
+    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\new_natural_images.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             dataSplit = row.strip().split(";")
@@ -26,21 +27,26 @@ def main():
             pixelData = pixelData.split("], [")
             for triplet in pixelData:
                 intensities = triplet.split(",")
-                inputs.append(int(intensities[0]))
+                intensities = int(intensities[0])
+                intensities = np.asarray([intensities])
+                inputs.append(intensities)
             outputs.append(tOut)
     # data = (inputs)
     # ValueError: Input arrays should have the same number of samples as target arrays. Found 1 input samples and 6899 target samples.
-    data = np.reshape(
-        (inputs),
-        (1, len(inputs))
+    #one array for each image.
+    inputs = np.reshape(
+        inputs,
+        (len(inputs), 1)
     )
-    print(data)
-    labels = outputs
+    # print(inputs)
+    labels = np.asarray(outputs)
 
     model = Sequential()
 
+    print(len(inputs))
+
     # peaks at about 0.75 around 120 epochs
-    model.add(Dense(activation='sigmoid', input_dim=len(data), units=70))
+    model.add(Dense(activation='sigmoid', input_dim=len(inputs), units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=70))
     model.add(Dense(activation='sigmoid', input_dim=70, units=1))
 
@@ -48,7 +54,7 @@ def main():
                   loss='mean_squared_error',
                   metrics=[metrics.binary_accuracy])
 
-    history = model.fit(data, labels, epochs=170, batch_size=1)
+    history = model.fit(inputs, labels, epochs=170, batch_size=1)
 
     model.summary()
 

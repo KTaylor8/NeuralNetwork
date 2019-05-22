@@ -56,9 +56,9 @@ class network():
         """
         This runs automatically to initialize the attributes for an instance of a class when the instance is created. It takes in list layerSizes that has the number of neurons per layer and uses it to determine the number of layers and randomize the NumPy arrays of weights and biases.
         """
-
+        #C:\Users\s-2508690\Desktop\NeuralNetwork
         with open(
-                r"powerPlantData.csv", newline=''
+                r"C:\Users\s-2508690\Desktop\NeuralNetwork\powerPlantData.csv", newline=''
         ) as dataFile:
             # non-subscriptable objects aren't containers & don't have indices
             minibatches = self.makeMinibatchesList(dataFile)
@@ -174,7 +174,7 @@ class network():
             activations[-1], expOut) * self.sigmoidPrime(weightedSumList[-1])
         nablaB[-1] = error
         nablaW[-1] = np.dot(error, activations[-2].transpose())
-        print(f"error: {error}")
+        #print(f"error: {error}")
 
         # backpropagate error using output error
         # find change in weights and biases for entire network
