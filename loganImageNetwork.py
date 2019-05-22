@@ -13,7 +13,7 @@ def main():
     inputs = []
     outputs = []
     #C:\Users\s-2508690\Desktop\NeuralNetwork
-    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\new_natural_images.csv", newline=''
+    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\mixed_new_natural_images.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             minibatch = []
@@ -30,12 +30,12 @@ def main():
             for triplet in pixelData:
                 intensities = triplet.split(",")
                 minibatch.append(int(intensities[0]))
-            minibatch = np.asarray(minibatch)
+           # minibatch = np.asarray(minibatch)
             inputs.append(minibatch)
             outputs.append(tOut)
 
     # print(inputs)
-    # inputs = np.asarray(inputs) #Keras docs says arrays in list but oh well
+    inputs = np.asarray(inputs) #Keras docs says arrays in list but oh well
     outputs = np.asarray(outputs)
     model = Sequential()
 
