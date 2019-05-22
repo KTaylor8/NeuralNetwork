@@ -15,6 +15,7 @@ def main():
     with open(r"new_natural_images.csv", newline=''
               ) as dataFile:
         for row in dataFile:
+            minibatch = []
             dataSplit = row.strip().split(";")
             jpgName = dataSplit[0]
             if jpgName[0:5] == "plane":
@@ -24,31 +25,31 @@ def main():
             pixelData = dataSplit[1]
             pixelData = pixelData.strip(" [[]]")
             pixelData = pixelData.split("], [")
+            # print(pixelData)
             for triplet in pixelData:
                 intensities = triplet.split(",")
-                inputs.append(int(intensities[0]))
+                minibatch.append(int(intensities[0]))
+            minibatch = np.asarray(minibatch)
+            inputs.append(minibatch)
             outputs.append(tOut)
-    # data = (inputs)
-    # ValueError: Input arrays should have the same number of samples as target arrays. Found 1 input samples and 6899 target samples.
-    data = np.reshape(
-        (inputs),
-        (1, len(inputs))
-    )
-    print(data)
-    labels = outputs
 
+    # print(inputs)
+    # inputs = np.asarray(inputs) #Keras docs says arrays in list but oh well
+    outputs = np.asarray(outputs)
     model = Sequential()
 
-    # peaks at about 0.75 around 120 epochs
-    model.add(Dense(activation='sigmoid', input_dim=len(data), units=70))
-    model.add(Dense(activation='sigmoid', input_dim=70, units=70))
-    model.add(Dense(activation='sigmoid', input_dim=70, units=1))
+    model.add(Dense(activation='sigmoid', input_dim=len(inputs[0]), units=1))
+
+    # # peaks at about 0.75 around 120 epochs
+    # model.add(Dense(activation='sigmoid', input_dim=len(inputs), units=70))
+    # model.add(Dense(activation='sigmoid', input_dim=70, units=70))
+    # model.add(Dense(activation='sigmoid', input_dim=70, units=1))
 
     model.compile(optimizer='SGD',
                   loss='mean_squared_error',
                   metrics=[metrics.binary_accuracy])
 
-    history = model.fit(data, labels, epochs=170, batch_size=1)
+    history = model.fit(inputs, outputs, epochs=170, batch_size=1)
 
     model.summary()
 
