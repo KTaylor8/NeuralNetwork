@@ -6,13 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-# doesn't actually work; it misses the 10.5% of photos that are airplanes because there are too many non-airplanes in the data and it just says everything is not an airplane
-
 
 def main():
     inputs = []
     outputs = []
-    #C:\Users\s-2508690\Desktop\NeuralNetwork
+    # C:\Users\s-2508690\Desktop\NeuralNetwork
     with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\mixed_new_natural_images.csv", newline=''
               ) as dataFile:
         for row in dataFile:
@@ -35,7 +33,7 @@ def main():
             outputs.append(tOut)
 
     # print(inputs)
-    inputs = np.asarray(inputs) #Keras docs says arrays in list but oh well
+    inputs = np.asarray(inputs)  # Keras docs says arrays in list but oh well
     outputs = np.asarray(outputs)
     model = Sequential()
 
