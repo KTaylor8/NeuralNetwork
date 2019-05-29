@@ -7,8 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
-
-
 inputs = []
 outputs = []
 with open(r"planesandpeoplerandom.csv", newline=''
@@ -35,9 +33,10 @@ model.compile(optimizer='Adadelta',
                 loss='logcosh',
                 metrics=[metrics.binary_accuracy])
 
-history = model.fit(data, labels, epochs=375, batch_size=1)
+history = model.fit(data, labels, epochs=10, batch_size=1)
 
 model.summary()
+model.save("model.h5")
 
 plt.plot(np.asarray(history.history["binary_accuracy"])*100)
 plt.title('Model accuracy')
@@ -46,5 +45,3 @@ plt.xlabel('Epoch')
 axes = plt.gca()
 axes.set_ylim(40, 100)
 plt.show()
- 
-model.save("model.h5")
