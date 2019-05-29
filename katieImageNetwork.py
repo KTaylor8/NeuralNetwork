@@ -12,7 +12,7 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    # C:\Users\s-2508690\Desktop\NeuralNetwork
+    #C:\Users\s-2508690\Desktop\NeuralNetwork
     with open(r"naturalImagesBinary.csv", newline=''
               ) as dataFile:
         for row in dataFile:
