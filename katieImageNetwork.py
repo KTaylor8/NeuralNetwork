@@ -12,8 +12,8 @@ from PIL import Image
 def main():
     inputs = []
     outputs = []
-    #C:\Users\s-2508690\Desktop\NeuralNetwork
-    with open(r"C:\Users\s-2508690\Desktop\NeuralNetwork\naturalImagesBinary.csv", newline=''
+    # C:\Users\s-2508690\Desktop\NeuralNetwork
+    with open(r"naturalImagesBinary.csv", newline=''
               ) as dataFile:
         for row in dataFile:
             dataSplit = row.strip().split(",")
