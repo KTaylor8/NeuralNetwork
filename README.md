@@ -1,4 +1,4 @@
-During my senior year of high school, I collaborated with two other students in a year-long class in which we managed our own project programming many iterations of neural networks, culminating in a neural network that could distinguish between pictures of airplanes and pictures of people with a high rate of success. We coded the first networks from scratch in Python to deepen our understanding of how a neural network actually works, without specialized neural network libraries. Then, we used Keras with a backend of Tensorflow to code subsequent networks.
+I collaborated with two other high school students in a year-long class in which we managed our own project programming many iterations of neural networks, culminating in a neural network that could distinguish between pictures of airplanes and pictures of people with a high rate of success. We coded the first networks from scratch in Python to deepen our understanding of how a neural network actually works, without specialized neural network libraries. Then, we used Keras with a backend of Tensorflow to code subsequent networks.
 
 # Repository Structure
 
